@@ -1,10 +1,6 @@
-<h4>{{ data.month }}</h4>
-<table>
+<html>
+<body>
 
-{% for n in data.number_of_days %}
-
-<td>{{ n }}</td>
-
-{% endfor %}
-
-</table>
+{% autoescape off %}{{ data.calendar }}{% endautoescape %}
+</body>
+</html>
