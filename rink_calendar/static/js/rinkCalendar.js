@@ -5,7 +5,7 @@ let endWeek = moment().endOf('month').add(monthVar, "month").week();
 
 function createCal(){
 	let calendar = [];
-	let weeks = [];
+	let weeks = ['<tr><th>SUN</th><th>MON</th><th>TUE</th><th>WED</th><th>THUR</th><th>FRI</th><th>SAT</th></tr>'];
 
 	for(var week = startWeek;week<endWeek+1;week++){
   		calendar.push({
@@ -24,11 +24,12 @@ function createCal(){
 	}
 	$('#rinkCal').empty();
 	$('#rinkCal').append(weeks);
+	$('#month-header').html(moment().startOf('month').add(monthVar, "month").format("MMMM YYYY"));
 
 }
 $( document ).ready(function() {
 
-	
+	createCal();
 
 	
 	
