@@ -1,10 +1,7 @@
 
 let monthVar = 0;
-// let startWeek = moment().startOf('month').add(monthVar, "month").week();
-// let endWeek = moment().endOf('month').add(monthVar, "month").week();
 let monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
-// // console.log(moment("October 2017").startOf('month').weekday());
-// // console.log(moment("October 2017").daysInMonth());
+
 function createCal(date){
 	let monthStart = moment(date).startOf('month').weekday();
 	let monthDays = moment(date).daysInMonth();
@@ -26,7 +23,7 @@ function createCal(date){
 		}
 		
 	}
-	console.log(monthDays);
+
 	if(firstWeek){
 		weeks.push('<tr>' + firstWeek + '</tr>')
 	}
@@ -67,16 +64,12 @@ $( document ).ready(function() {
 	$('#fwd').click(function(){
    		monthVar += 1;	
    		monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
-   		startWeek = moment().startOf('month').add(monthVar, "month").week();
-   		endWeek = moment().endOf('month').add(monthVar, "month").week();
-   		createCal(monthHeader);
+		createCal(monthHeader);
    	});
 
    	$('#back').click(function(){
    		monthVar -= 1;	
    		monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
-   		startWeek = moment().startOf('month').add(monthVar, "month").week();
-   		endWeek = moment().endOf('month').add(monthVar, "month").week();
    		createCal(monthHeader);
    	});
 
