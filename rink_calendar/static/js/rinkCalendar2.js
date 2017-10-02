@@ -8,17 +8,17 @@ function createCal(date){
 	let monthWeeks = Math.floor((monthDays + monthStart) / 7);
 	let firstWeekCounter = monthStart;
 	let calendar = [];
-	let weeks = ['<tr><th>SUN</th><th>MON</th><th>TUE</th><th>WED</th><th>THUR</th><th>FRI</th><th>SAT</th></tr>'];
+	let weeks = ['<tr><th class="text-center">SUN</th><th class="text-center">MON</th><th class="text-center">TUE</th><th class="text-center">WED</th><th class="text-center">THUR</th><th class="text-center">FRI</th><th class="text-center">SAT</th></tr>'];
 	let firstWeek = '';
 	let firstDays = 1;
 
 	for(i=0;i<7;i++){
 				if(firstWeekCounter > 0){
-			firstWeek += '<td className="cellShell nodate"></td>';	
+			firstWeek += '<td class="cellShell nodate"></td>';	
 			firstWeekCounter -= 1;
 		}
 		else{
-			firstWeek += '<td className="cellShell" id=' + firstDays + '>' + firstDays +'</td>';
+			firstWeek += '<td class="cellShell"><table class="singleCell"><th class="cellData dateNum" id=' + firstDays + '>' + firstDays +'</th><tr></tr></table></td>';
 			firstDays += 1;
 		}
 		
@@ -31,7 +31,7 @@ function createCal(date){
 	for(day=8-monthStart;day<=monthDays;day){
 		let daysInWeek = '';
 		for(i=0;i<7;i++){
-			daysInWeek += '<td className="cellShell" id="' + day + '">' + day + '</td>';
+			daysInWeek += '<td class="cellShell"><table class="singleCell"><th class="cellData dateNum" id=' + day + '>' + day +'</th><tr></tr></table></td>';
 			day++
 			if(day > monthDays){
 				break;
