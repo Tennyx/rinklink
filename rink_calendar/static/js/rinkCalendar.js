@@ -1,37 +1,52 @@
 
 let monthVar = 0;
-let startWeek = moment().startOf('month').add(monthVar, "month").week();
-let endWeek = moment().endOf('month').add(monthVar, "month").week();
-console.log(moment("2017-September").startOf('month').weekday());
-console.log(moment("2017-October-31").daysInMonth());
-function createCal(){
-	let calendar = [];
-	let weeks = ['<tr><th>SUN</th><th>MON</th><th>TUE</th><th>WED</th><th>THUR</th><th>FRI</th><th>SAT</th></tr>'];
-	let monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
+let monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
 
-	for(var week = startWeek;week<endWeek+1;week++){
-  		calendar.push({
-    		week:week,
-    		days:Array(7).fill(0).map((n, i) => moment().week(week).startOf('week').clone().add(n + i, 'day'))
-  		})
+function createCal(date){
+	let monthStart = moment(date).startOf('month').weekday();
+	let monthDays = moment(date).daysInMonth();
+	let monthWeeks = Math.floor((monthDays + monthStart) / 7);
+	let firstWeekCounter = monthStart;
+	let calendar = [];
+	let weeks = ['<tr><th class="text-center">SUN</th><th class="text-center">MON</th><th class="text-center">TUE</th><th class="text-center">WED</th><th class="text-center">THUR</th><th class="text-center">FRI</th><th class="text-center">SAT</th></tr>'];
+	let firstWeek = [];
+	let firstDays = 1;
+
+	for(i=0;i<7;i++){
+		if(firstWeekCounter > 0){
+			firstWeek.push('<td class="cellShell nodate"></td>');	
+			firstWeekCounter -= 1;
+		}
+		else{
+			firstWeek.push(
+				'<td class="cellShell">\
+					<div class="dateNum" id=' + firstDays + '>' + firstDays +'</div>\
+				</td>'
+			);
+			firstDays += 1;
+		}
+		
 	}
-	console.log(startWeek);
-	console.log(endWeek);
-	for(var d=0;d<calendar.length;d++){
+
+	if(firstWeek){
+		weeks.push('<tr>' + firstWeek + '</tr>')
+	}
+
+	for(day=8-monthStart;day<=monthDays;day){
 		let daysInWeek = [];
-		for(var e=0;e<7;e++){
-			calDay = calendar[d].days[e].format("D");
-			
-			if(d == 0 && calDay > 20 || d > 3 && calDay < 7){
-				daysInWeek.push('<td className="cellShell nodate"></td>');
-			}
-			else{
-				daysInWeek.push('<td className="cellShell" id="' + calDay + '">' + calDay + '</td>');	
+		for(i=0;i<7;i++){
+			daysInWeek.push(
+				'<td class="cellShell">\
+					<div class="dateNum" id=' + day + '>' + day +'</div>\
+				</td>'
+			);
+			day++
+			if(day > monthDays){
+				break;
 			}
 		}
 		weeks.push('<tr>' + daysInWeek + '</tr>');
 	}
-
 
 	
 	$('#rinkCal').empty();
@@ -43,7 +58,7 @@ function createCal(){
   			if(data[i].monthYear == monthHeader){
 				for(let num=1;num<Object.keys(data[i]).length-2;num++){
 					let findKey = 'c' + num;
-					$('#' + num).html(data[i][findKey]);
+					$('#' + num).after('<div class="cellData" id="c' + num + '">' + data[i][findKey] + '</div>');
 				}
   			}
   		}
@@ -56,16 +71,18 @@ $( document ).ready(function() {
 	
 	$('#fwd').click(function(){
    		monthVar += 1;	
-   		startWeek = moment().startOf('month').add(monthVar, "month").week();
-   		endWeek = moment().endOf('month').add(monthVar, "month").week();
-   		createCal();
+   		monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
+		createCal(monthHeader);
    	});
 
    	$('#back').click(function(){
    		monthVar -= 1;	
-   		startWeek = moment().startOf('month').add(monthVar, "month").week();
-   		endWeek = moment().endOf('month').add(monthVar, "month").week();
-   		createCal();
+   		monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
+   		createCal(monthHeader);
+   	});
+
+   	$('#rinkCal').on('click','.cellData',function(){
+   		alert(this.id);
    	});
 
 });

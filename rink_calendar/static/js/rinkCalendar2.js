@@ -9,16 +9,24 @@ function createCal(date){
 	let firstWeekCounter = monthStart;
 	let calendar = [];
 	let weeks = ['<tr><th class="text-center">SUN</th><th class="text-center">MON</th><th class="text-center">TUE</th><th class="text-center">WED</th><th class="text-center">THUR</th><th class="text-center">FRI</th><th class="text-center">SAT</th></tr>'];
-	let firstWeek = '';
+	let firstWeek = [];
 	let firstDays = 1;
 
 	for(i=0;i<7;i++){
-				if(firstWeekCounter > 0){
-			firstWeek += '<td class="cellShell nodate"></td>';	
+		if(firstWeekCounter > 0){
+			firstWeek.push('<td class="cellShell nodate"></td>');	
 			firstWeekCounter -= 1;
 		}
 		else{
-			firstWeek += '<td class="cellShell"><table class="singleCell"><th class="cellData dateNum" id=' + firstDays + '>' + firstDays +'</th><tr></tr></table></td>';
+			firstWeek.push(
+				'<td class="cellShell">\
+					<table class="singleCell">\
+						<tr class="dateNum" id=' + firstDays + '>\
+							<td>' + firstDays +'</td>\
+						</tr>\
+					</table>\
+				</td>'
+			);
 			firstDays += 1;
 		}
 		
@@ -29,9 +37,17 @@ function createCal(date){
 	}
 
 	for(day=8-monthStart;day<=monthDays;day){
-		let daysInWeek = '';
+		let daysInWeek = [];
 		for(i=0;i<7;i++){
-			daysInWeek += '<td class="cellShell"><table class="singleCell"><th class="cellData dateNum" id=' + day + '>' + day +'</th><tr></tr></table></td>';
+			daysInWeek.push(
+				'<td class="cellShell">\
+					<table class="singleCell">\
+						<tr class="dateNum" id=' + day + '>\
+							<td>' + day +'</td>\
+						</tr>\
+					</table>\
+				</td>'
+			);
 			day++
 			if(day > monthDays){
 				break;
@@ -50,7 +66,8 @@ function createCal(date){
   			if(data[i].monthYear == monthHeader){
 				for(let num=1;num<Object.keys(data[i]).length-2;num++){
 					let findKey = 'c' + num;
-					$('#' + num).html(data[i][findKey]);
+					$('#' + num).after('<tr><td>' + data[i][findKey] + '</td></tr>');
+					console.log('<tr>' + data[i][findKey] + '</tr>')
 				}
   			}
   		}
