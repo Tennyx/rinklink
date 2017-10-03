@@ -1,3 +1,8 @@
+table {
+	margin-left: auto;
+	margin-right: auto;
+}
+
 .cellShell {
 	height: 100px;
 	width: 100px;
@@ -14,5 +19,16 @@
 
 .cellData {
 	height: 20%;
-	font-size: 70%;
+	font-size: 80%;
+}
+
+#btnDiv {
+	margin-top: 50px
+}
+
+#eventDiv {
+	width: 50%;
+	margin-top: 50px;
+	margin-left: auto;
+	margin-right: auto;
 }

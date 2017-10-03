@@ -2,6 +2,23 @@
 let monthVar = 0;
 let monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
 
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    let data = ev.dataTransfer.getData("text");
+    let nodeCopy = document.getElementById(data).cloneNode(true);
+  	nodeCopy.id = "newId";
+  	ev.target.appendChild(nodeCopy);
+}
+
+
 function createCal(date){
 	let monthStart = moment(date).startOf('month').weekday();
 	let monthDays = moment(date).daysInMonth();
@@ -19,7 +36,7 @@ function createCal(date){
 		}
 		else{
 			firstWeek.push(
-				'<td class="cellShell">\
+				'<td class="cellShell" ondrop="drop(event)" ondragover="allowDrop(event)">\
 					<div class="dateNum" id=' + firstDays + '>' + firstDays +'</div>\
 				</td>'
 			);
@@ -36,7 +53,7 @@ function createCal(date){
 		let daysInWeek = [];
 		for(i=0;i<7;i++){
 			daysInWeek.push(
-				'<td class="cellShell">\
+				'<td class="cellShell" ondrop="drop(event)" ondragover="allowDrop(event)">\
 					<div class="dateNum" id=' + day + '>' + day +'</div>\
 				</td>'
 			);
@@ -71,6 +88,12 @@ $( document ).ready(function() {
 	
 	$('#fwd').click(function(){
    		monthVar += 1;	
+   		monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
+		createCal(monthHeader);
+   	});
+
+   	$('#currentMonth').click(function(){
+   		monthVar = 0;	
    		monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
 		createCal(monthHeader);
    	});

@@ -15,7 +15,7 @@
 
 <body>
 <!-- {% autoescape off %}{{ data.calendar }}{% endautoescape %} -->
-<h2 id="month-header"></h2>
+<h2 class="text-center" id="month-header"></h2>
 <table id="rinkCal">
 	<tr>
 		<th>SUN</th>
@@ -29,9 +29,18 @@
 
 
 </table>
-<button id="back">back</button><button id="fwd">forward</button>
-<table id="test"></table>
 
+<div id="btnDiv" class="text-center">
+	<button id="back" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+	<button id="currentMonth" class="btn btn-primary">CURRENT MONTH</button>
+	<button id="fwd" class="btn btn-primary"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+</div>	
+
+
+<div id="eventDiv">
+	<div id="drag1" class="cellData" draggable="true" ondragstart="drag(event)" style="padding:3px;display:inline;background:#ffff00">Free Skate</div>
+	<div id="drag2" class="cellData" draggable="true" ondragstart="drag(event)" style="padding:3px;display:inline;background:#99ff87">Skate & Shoot</div>
+</div>
 
 
 
