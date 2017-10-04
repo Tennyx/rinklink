@@ -13,9 +13,18 @@ function drag(ev) {
 function drop(ev) {
     ev.preventDefault();
     let data = ev.dataTransfer.getData("text");
-    let nodeCopy = document.getElementById(data).cloneNode(true);
-  	nodeCopy.id = "newId";
-  	ev.target.appendChild(nodeCopy);
+    if(document.getElementById(data).id[0] == 'e' || ev.altKey){
+    	let nodeCopy = document.getElementById(data).cloneNode(true);	
+    	nodeCopy.id = ev.target.id + nodeCopy.textContent;
+    	ev.target.appendChild(nodeCopy);
+    	console.log(ev.target.id);
+    	console.log(nodeCopy.textContent);
+    }
+    else{
+    	let nodeInd = document.getElementById(data);
+    	nodeInd.id = ev.target.id + nodeInd.textContent;
+    	ev.target.appendChild(nodeInd);	
+    }
 }
 
 
@@ -36,8 +45,8 @@ function createCal(date){
 		}
 		else{
 			firstWeek.push(
-				'<td class="cellShell" ondrop="drop(event)" ondragover="allowDrop(event)">\
-					<div class="dateNum" id=' + firstDays + '>' + firstDays +'</div>\
+				'<td class="cellShell" ondrop="drop(event)" ondragover="allowDrop(event)" id="' + firstDays + '">\
+					<div class="dateNum">' + firstDays +'</div>\
 				</td>'
 			);
 			firstDays += 1;
@@ -53,8 +62,8 @@ function createCal(date){
 		let daysInWeek = [];
 		for(i=0;i<7;i++){
 			daysInWeek.push(
-				'<td class="cellShell" ondrop="drop(event)" ondragover="allowDrop(event)">\
-					<div class="dateNum" id=' + day + '>' + day +'</div>\
+				'<td class="cellShell" ondrop="drop(event)" ondragover="allowDrop(event)" id=' + day + '>\
+					<div class="dateNum">' + day +'</div>\
 				</td>'
 			);
 			day++
@@ -75,7 +84,8 @@ function createCal(date){
   			if(data[i].monthYear == monthHeader){
 				for(let num=1;num<Object.keys(data[i]).length-2;num++){
 					let findKey = 'c' + num;
-					$('#' + num).after('<div class="cellData" id="c' + num + '">' + data[i][findKey] + '</div>');
+					$('#' + num).append('<div class="cellData" id="c' + num + '">' + data[i][findKey] + '</div>');
+					// $('#' + num).after('<div class="cellData" id="c' + num + '">' + data[i][findKey] + '</div>');
 				}
   			}
   		}
