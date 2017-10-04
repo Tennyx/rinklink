@@ -85,7 +85,6 @@ function createCal(date){
 				for(let num=1;num<Object.keys(data[i]).length-2;num++){
 					let findKey = 'c' + num;
 					$('#' + num).append('<div class="cellData" id="c' + num + '">' + data[i][findKey] + '</div>');
-					// $('#' + num).after('<div class="cellData" id="c' + num + '">' + data[i][findKey] + '</div>');
 				}
   			}
   		}
@@ -115,7 +114,54 @@ $( document ).ready(function() {
    	});
 
    	$('#rinkCal').on('click','.cellData',function(){
-   		alert(this.id);
+   		$modal.modal('show');
+   	});
+
+   	$('#eventDiv').on('click','.cellData',function(){
+   		$modal.modal('show');
+   	});
+
+   	$('#createEvent').click(function(){
+   		$('#eventDiv').append(
+
+   	'<div id="eventdrag1" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">ffqfwqq</div>\
+   	\
+   	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">\
+		<div class="modal-dialog" role="document">\
+			<div class="modal-content">\
+				<div class="modal-header">\
+					<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>\
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">\
+						<span aria-hidden="true">&times;</span>\
+					</button>\
+				</div>\
+				<div class="modal-body">\
+	        	<form>\
+          			<div class="form-group">\
+            			<label for="rinkEvent" class="form-control-label">Event Title:</label>\
+            			<input type="text" class="form-control" id="rinkEvent">\
+          			</div>\
+          			<div class="form-group">\
+            			<label for="eventTime" class="form-control-label">Time:</label>\
+            			<input type="text" class="form-control" id="eventTime">\
+          			</div>\
+          			<div class="form-group">\
+            			<label for="eventPrice" class="form-control-label">Price:</label>\
+            			<input type="text" class="form-control" id="eventPrice">\
+          			</div>\
+         			<div class="form-group">\
+            			<label for="eventDesc" class="form-control-label">Description:</label>\
+            			<textarea class="form-control" id="eventDesc"></textarea>\
+          			</div>\
+        		</form>\
+				</div>\
+				<div class="modal-footer">\
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\
+					<button type="button" class="btn btn-primary">Save changes</button>\
+				</div>\
+			</div>\
+		</div>\
+	</div>');
    	});
 
 });
