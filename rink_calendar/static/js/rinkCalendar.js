@@ -1,6 +1,11 @@
 
 let monthVar = 0;
 let monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
+let calData = {
+				months: {},
+				events: {'October 2017': []}
+			};
+
 
 function allowDrop(ev) {
     ev.preventDefault();
@@ -121,10 +126,16 @@ $( document ).ready(function() {
    		$modal.modal('show');
    	});
 
+   	$('.saveBtn').click(function(){
+
+   	});
+
    	$('#createEvent').click(function(){
+   		calData.events[monthHeader].push('x');
+   		console.log(calData);
    		$('#eventDiv').append(
 
-   	'<div id="eventdrag1" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">ffqfwqq</div>\
+   	'<div id="eventdrag1" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">Untitled Event</div>\
    	\
    	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">\
 		<div class="modal-dialog" role="document">\
@@ -156,12 +167,12 @@ $( document ).ready(function() {
         		</form>\
 				</div>\
 				<div class="modal-footer">\
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\
-					<button type="button" class="btn btn-primary">Save changes</button>\
+					<button type="button" class="saveBtn btn btn-primary">SAVE</button>\
 				</div>\
 			</div>\
 		</div>\
 	</div>');
+
    	});
 
 });
