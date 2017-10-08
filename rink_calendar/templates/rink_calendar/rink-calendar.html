@@ -3,6 +3,7 @@
 <head>
 	<title>Rink Calendar</title>
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+	<link href="https://fonts.googleapis.com/css?family=Russo+One" rel="stylesheet">
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 	<link rel="stylesheet" href="/static/css/main.css">
@@ -35,50 +36,16 @@
 	</div>	
 
 	<div class="text-center mt-5">
-		<button id="createEvent" class="btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i></button>
+		<button id="createEvent" class="btn btn-success" data-toggle="modal" data-target="#createEventMod"><i class="fa fa-plus" aria-hidden="true"></i></button>
 	</div>
 
 	<div id="eventDiv">
-		<div id="eventdrag1" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal" style="padding:3px;display:inline;background:#ffff00">Free Skate 7p-9p</div>
-		<div id="eventdrag2" class="cellData" draggable="true" ondragstart="drag(event)" style="padding:3px;display:inline;background:#99ff87">Skate & Shoot 12p-2p</div>
+		<div id="eventdrag1" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal" style="padding:3px;background:#ffff00">Free Skate 7p-9p</div>
+		<div id="eventdrag2" class="cellData" draggable="true" ondragstart="drag(event)" style="padding:3px;background:#99ff87">Skate & Shoot 12p-2p</div>
+
+		
 	</div>
 
-	<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-	        	<form>
-          			<div class="form-group">
-            			<label for="rinkEvent" class="form-control-label">Event Title:</label>
-            			<input type="text" class="form-control" id="rinkEvent">
-          			</div>
-          			<div class="form-group">
-            			<label for="eventTime" class="form-control-label">Time:</label>
-            			<input type="text" class="form-control" id="eventTime">
-          			</div>
-          			<div class="form-group">
-            			<label for="eventPrice" class="form-control-label">Price:</label>
-            			<input type="text" class="form-control" id="eventPrice">
-          			</div>
-         			<div class="form-group">
-            			<label for="eventDesc" class="form-control-label">Description:</label>
-            			<textarea class="form-control" id="eventDesc"></textarea>
-          			</div>
-        		</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				</div>
-			</div>
-		</div>
-	</div> -->
 
 
 
