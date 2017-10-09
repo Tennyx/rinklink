@@ -1,6 +1,35 @@
 
 let monthVar = 0;
 let monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
+let calData = {
+				months: {},
+				events: {}
+			};
+
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev, el) {
+    ev.preventDefault();
+    let data = ev.dataTransfer.getData("text");
+    if(document.getElementById(data).id[0] == 'e' || ev.altKey){
+    	let nodeCopy = document.getElementById(data).cloneNode(true);	
+    	nodeCopy.id = ev.target.id + nodeCopy.textContent;
+    	el.appendChild(nodeCopy);
+    }
+    else{
+    	let nodeInd = document.getElementById(data);
+    	nodeInd.id = ev.target.id + nodeInd.textContent;
+    	el.appendChild(nodeInd);	
+    }
+}
+
 
 function createCal(date){
 	let monthStart = moment(date).startOf('month').weekday();
@@ -19,12 +48,8 @@ function createCal(date){
 		}
 		else{
 			firstWeek.push(
-				'<td class="cellShell">\
-					<table class="singleCell">\
-						<tr class="dateNum" id=' + firstDays + '>\
-							<td>' + firstDays +'</td>\
-						</tr>\
-					</table>\
+				'<td class="cellShell" ondrop="drop(event, this)" ondragover="allowDrop(event)" id="' + firstDays + '">\
+					<div class="dateNum">' + firstDays +'</div>\
 				</td>'
 			);
 			firstDays += 1;
@@ -40,12 +65,8 @@ function createCal(date){
 		let daysInWeek = [];
 		for(i=0;i<7;i++){
 			daysInWeek.push(
-				'<td class="cellShell">\
-					<table class="singleCell">\
-						<tr class="dateNum" id=' + day + '>\
-							<td>' + day +'</td>\
-						</tr>\
-					</table>\
+				'<td class="cellShell" ondrop="drop(event, this)" ondragover="allowDrop(event)" id=' + day + '>\
+					<div class="dateNum">' + day +'</div>\
 				</td>'
 			);
 			day++
@@ -66,8 +87,7 @@ function createCal(date){
   			if(data[i].monthYear == monthHeader){
 				for(let num=1;num<Object.keys(data[i]).length-2;num++){
 					let findKey = 'c' + num;
-					$('#' + num).after('<tr><td>' + data[i][findKey] + '</td></tr>');
-					console.log('<tr>' + data[i][findKey] + '</tr>')
+					$('#' + num).append('<div class="cellData" id="c' + num + '">' + data[i][findKey] + '</div>');
 				}
   			}
   		}
@@ -75,6 +95,43 @@ function createCal(date){
 }
 
 $( document ).ready(function() {
+
+	$('#eventDiv').append(
+		'<div class="modal fade" id="createEventMod" tabindex="-1" role="dialog" aria-labelledby="createEventLabel" aria-hidden="true">\
+			<div class="modal-dialog" role="document">\
+				<div class="modal-content">\
+					<div class="modal-header">\
+						<h5 class="modal-title" id="createEventLabel">New Event</h5>\
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">\
+							<span aria-hidden="true">&times;</span>\
+						</button>\
+					</div>\
+					<div class="modal-body">\
+		        	<form>\
+	          			<div class="form-group">\
+	            			<label for="rinkEvent" class="form-control-label">Event Title:</label>\
+	            			<input type="text" class="form-control" id="rinkEvent">\
+	          			</div>\
+	          			<div class="form-group">\
+	            			<label for="eventTime" class="form-control-label">Time:</label>\
+	            			<input type="text" class="form-control" id="eventTime">\
+	          			</div>\
+	          			<div class="form-group">\
+	            			<label for="eventPrice" class="form-control-label">Price:</label>\
+	            			<input type="text" class="form-control" id="eventPrice">\
+	          			</div>\
+	         			<div class="form-group">\
+	            			<label for="eventDesc" class="form-control-label">Description:</label>\
+	            			<textarea class="form-control" id="eventDesc"></textarea>\
+	          			</div>\
+	        		</form>\
+					</div>\
+					<div class="modal-footer">\
+						<button id="saveNewEvent" type="button" class="btn btn-primary" data-dismiss="modal">Create Event</button>\
+					</div>\
+				</div>\
+			</div>\
+		</div>');
 
 	createCal();
 	
@@ -84,10 +141,138 @@ $( document ).ready(function() {
 		createCal(monthHeader);
    	});
 
+   	$('#currentMonth').click(function(){
+   		monthVar = 0;	
+   		monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
+		createCal(monthHeader);
+   	});
+
    	$('#back').click(function(){
    		monthVar -= 1;	
    		monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
    		createCal(monthHeader);
    	});
+
+   	$('#rinkCal').on('click','.cellData',function(){
+   		// $modal.modal('show');
+   	});
+
+   	$('#editEvent').click(function(){
+   		// $('#eventDiv').append(
+   		// 	);
+   		// $('#editModal').on('hidden.bs.modal', function () {
+   		// 	$('#editModal').remove();
+   		// });
+   	});
+
+   	$('#eventDiv').on('click','.cellData',function(){
+   		
+   		let currentNode = this.id;
+
+   		$('#eventDiv').append(
+	   		'<div class="modal fade" id="eventModal">\
+			  <div class="modal-dialog" role="document">\
+			    <div class="modal-content">\
+			      <div class="modal-header">\
+			        <h5 class="modal-title">Event Details</h5>\
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
+			          <span aria-hidden="true">&times;</span>\
+			        </button>\
+			      </div>\
+			      <div class="modal-body">' +
+			        'Event: ' + calData.events[currentNode].title + '<br>' +
+			        'Time: ' + calData.events[currentNode].time + '<br>' +
+			        'Price: ' + calData.events[currentNode].price + '<br>' +
+			        'Description: ' + calData.events[currentNode].desc + '<br>' +
+			      '</div>\
+			      <div class="modal-footer">\
+			        <button id="editEvent" type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-dismiss="modal">EDIT</button>\
+			      </div>\
+			    </div>\
+			  </div>\
+			</div>\
+			<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">\
+				<div class="modal-dialog" role="document">\
+					<div class="modal-content">\
+						<div class="modal-header">\
+							<h5 class="modal-title" id="eventModalLabel">Modal title</h5>\
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">\
+							<span aria-hidden="true">&times;</span>\
+							</button>\
+						</div>\
+						<div class="modal-body">\
+				        	<form>\
+			          			<div class="form-group">\
+			            			<label for="editEvent" class="form-control-label">Event Title:</label>\
+			            			<input type="text" value="' + calData.events[currentNode].title + '" class="form-control" id="editEvent">\
+			          			</div>\
+			          			<div class="form-group">\
+			            			<label for="editTime" class="form-control-label">Time:</label>\
+			            			<input type="text" value="' + calData.events[currentNode].time + '" class="form-control" id="editTime">\
+			          			</div>\
+			          			<div class="form-group">\
+			            			<label for="editPrice" class="form-control-label">Price:</label>\
+			            			<input type="text" value="' + calData.events[currentNode].price + '" class="form-control" id="editPrice">\
+			          			</div>\
+			         			<div class="form-group">\
+			            			<label for="editDesc" class="form-control-label">Description:</label>\
+			            			<textarea class="form-control" id="editDesc">' + calData.events[currentNode].desc + '</textarea>\
+			          			</div>\
+			        		</form>\
+						</div>\
+						<div class="modal-footer">\
+							<button type="button" id="submitChanges" class="btn btn-primary" data-dismiss="modal">Submit Changes</button>\
+						</div>\
+					</div>\
+				</div>\
+			</div>');
+		$('#eventModal').on('hidden.bs.modal', function () {
+   			$('#eventModal').remove();
+   		});
+   		$('#editModal').on('hidden.bs.modal', function () {
+   			$('#editModal').remove();
+   		});
+
+   		$('#submitChanges').click(function(){
+   			$('#' + currentNode).remove();
+   			delete calData.events[currentNode];
+   			console.log(calData);
+   			let editId = $('#editEvent').val() + $('#editTime').val() + $('#editPrice').val();
+   			calData.events[editId] = {};
+			let editTitle = calData.events[editId]['title'] = $('#editEvent').val();
+   			calData.events[editId]['time'] = $('#editTime').val();
+   			calData.events[editId]['price'] = $('#editPrice').val();
+   			calData.events[editId]['desc'] = $('#editDesc').val();
+   			$('#eventDiv').append(
+				'<div id="' + editId + '" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#eventModal">' + editTitle + '</div>'
+			);
+   		});
+   	});
+
+
+
+   	$('#saveNewEvent').click(function(){
+   		let eventId = $('#rinkEvent').val() + $('#eventTime').val() + $('#eventPrice').val();
+
+   		if(eventId in calData){
+   			alert('Event with same title, time & price already exist.');
+   			return;
+   		}
+   		else{
+   			calData.events[eventId] = {};
+   			let eventTitle = calData.events[eventId]['title'] = $('#rinkEvent').val();
+   			let eventTime = calData.events[eventId]['time'] = $('#eventTime').val();
+   			let eventPrice = calData.events[eventId]['price'] = $('#eventPrice').val();
+   			let eventDesc = calData.events[eventId]['desc'] = $('#eventDesc').val();
+   			console.log(calData);
+	   		$('#eventDiv').append(
+				'<div id="' + eventId + '" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#eventModal">' + eventTitle + '</div>'
+			);
+	   	}
+	   	
+	   	$('#createEventMod').on('hidden.bs.modal', function () {
+    		$(this).find("input,textarea,select").val('').end();
+		});
+	});
 
 });

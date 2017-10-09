@@ -160,6 +160,10 @@ $( document ).ready(function() {
    		// $modal.modal('show');
    	});
 
+   	$('#editEvent').click(function(){
+   		
+   	});
+
    	$('#eventDiv').on('click','.cellData',function(){
    		console.log(calData);
    		console.log(this.id);
@@ -203,7 +207,6 @@ $( document ).ready(function() {
    		$('#eventModal').on('hidden.bs.modal', function () {
    			$('#eventModal').remove();
    		});
-   		// $modal.modal('show');
    	});
 
    	// $('.saveBtn').click(function(){
