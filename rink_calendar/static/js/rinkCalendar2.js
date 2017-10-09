@@ -6,6 +6,18 @@ let calData = {
 				events: {}
 			};
 
+function createId(data){
+	let acceptableChar = 'abcdefghijklmnopqrstuvwxyz0123456789';
+	let newId = ''
+
+	for(i=0;i<data.length;i++){
+		let isLetter = acceptableChar.indexOf(data[i].toLowerCase());
+		if(isLetter >= 0){
+			newId += data[i];
+		}
+	}
+	return newId;
+}
 
 function allowDrop(ev) {
     ev.preventDefault();
@@ -237,7 +249,7 @@ $( document ).ready(function() {
    			$('#' + currentNode).remove();
    			delete calData.events[currentNode];
    			console.log(calData);
-   			let editId = $('#editEvent').val() + $('#editTime').val() + $('#editPrice').val();
+   			let editId = createId($('#editEvent').val() + $('#editTime').val() + $('#editPrice').val());
    			calData.events[editId] = {};
 			let editTitle = calData.events[editId]['title'] = $('#editEvent').val();
    			calData.events[editId]['time'] = $('#editTime').val();
@@ -246,13 +258,20 @@ $( document ).ready(function() {
    			$('#eventDiv').append(
 				'<div id="' + editId + '" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#eventModal">' + editTitle + '</div>'
 			);
+			$('#eventModal').on('hidden.bs.modal', function () {
+   				$('#eventModal').remove();
+   			});
+   			$('#editModal').on('hidden.bs.modal', function () {
+   				$('#editModal').remove();
+   			});
+
    		});
    	});
 
 
 
    	$('#saveNewEvent').click(function(){
-   		let eventId = $('#rinkEvent').val() + $('#eventTime').val() + $('#eventPrice').val();
+   		let eventId = 'e' + createId($('#rinkEvent').val() + $('#eventTime').val() + $('#eventPrice').val());
 
    		if(eventId in calData){
    			alert('Event with same title, time & price already exist.');
@@ -272,7 +291,10 @@ $( document ).ready(function() {
 	   	
 	   	$('#createEventMod').on('hidden.bs.modal', function () {
     		$(this).find("input,textarea,select").val('').end();
+    		$('#eventModal').remove();
+    		$('#editModal').remove();
 		});
+
 	});
 
 });
