@@ -108,42 +108,19 @@ function createCal(date){
 
 $( document ).ready(function() {
 
-	$('#eventDiv').append(
-		'<div class="modal fade" id="createEventMod" tabindex="-1" role="dialog" aria-labelledby="createEventLabel" aria-hidden="true">\
-			<div class="modal-dialog" role="document">\
-				<div class="modal-content">\
-					<div class="modal-header">\
-						<h5 class="modal-title" id="createEventLabel">New Event</h5>\
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-							<span aria-hidden="true">&times;</span>\
-						</button>\
-					</div>\
-					<div class="modal-body">\
-		        	<form>\
-	          			<div class="form-group">\
-	            			<label for="rinkEvent" class="form-control-label">Event Title:</label>\
-	            			<input type="text" class="form-control" id="rinkEvent">\
-	          			</div>\
-	          			<div class="form-group">\
-	            			<label for="eventTime" class="form-control-label">Time:</label>\
-	            			<input type="text" class="form-control" id="eventTime">\
-	          			</div>\
-	          			<div class="form-group">\
-	            			<label for="eventPrice" class="form-control-label">Price:</label>\
-	            			<input type="text" class="form-control" id="eventPrice">\
-	          			</div>\
-	         			<div class="form-group">\
-	            			<label for="eventDesc" class="form-control-label">Description:</label>\
-	            			<textarea class="form-control" id="eventDesc"></textarea>\
-	          			</div>\
-	        		</form>\
-					</div>\
-					<div class="modal-footer">\
-						<button id="saveNewEvent" type="button" class="btn btn-primary" data-dismiss="modal">Create Event</button>\
-					</div>\
-				</div>\
-			</div>\
-		</div>');
+	$('#eventDiv').append(createModal);
+
+	for(i=0;i<timeArr.length;i++){
+		$('#eventTimeStart').append('<option value="' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '</option>');
+		$('#eventTimeStart').append('<option value="' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '</option>');
+		$('#eventTimeStart').append('<option value="' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '</option>');
+		$('#eventTimeStart').append('<option value="' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '</option>');
+
+		$('#eventTimeEnd').append('<option value="' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '</option>');
+		$('#eventTimeEnd').append('<option value="' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '</option>');
+		$('#eventTimeEnd').append('<option value="' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '</option>');
+		$('#eventTimeEnd').append('<option value="' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '</option>');
+	}
 
 	createCal();
 	
@@ -193,8 +170,7 @@ $( document ).ready(function() {
 			      </div>\
 			      <div class="modal-body">' +
 			        'Event: ' + calData.events[currentNode].title + '<br>' +
-			        'Time: ' + calData.events[currentNode].time + '<br>' +
-			        'Price: ' + calData.events[currentNode].price + '<br>' +
+			        'Time: ' + calData.events[currentNode].startTime + ' to ' + calData.events[currentNode].endTime + '<br>' +
 			        'Description: ' + calData.events[currentNode].desc + '<br>' +
 			      '</div>\
 			      <div class="modal-footer">\
@@ -219,12 +195,13 @@ $( document ).ready(function() {
 			            			<input type="text" value="' + calData.events[currentNode].title + '" class="form-control" id="editEvent">\
 			          			</div>\
 			          			<div class="form-group">\
-			            			<label for="editTime" class="form-control-label">Time:</label>\
-			            			<input type="text" value="' + calData.events[currentNode].time + '" class="form-control" id="editTime">\
-			          			</div>\
-			          			<div class="form-group">\
-			            			<label for="editPrice" class="form-control-label">Price:</label>\
-			            			<input type="text" value="' + calData.events[currentNode].price + '" class="form-control" id="editPrice">\
+			            			<label for="editTimeStart" class="form-control-label">Time:</label>\
+			            			<select id="editTimeStart"> to\
+	            					\
+	            					</select>\
+	            					<select id="editTimeEnd">\
+			            			\
+			            			</select>\
 			          			</div>\
 			         			<div class="form-group">\
 			            			<label for="editDesc" class="form-control-label">Description:</label>\
@@ -238,6 +215,23 @@ $( document ).ready(function() {
 					</div>\
 				</div>\
 			</div>');
+
+   		for(i=0;i<timeArr.length;i++){
+			$('#editTimeStart').append('<option value="' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '</option>');
+			$('#editTimeStart').append('<option value="' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '</option>');
+			$('#editTimeStart').append('<option value="' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '</option>');
+			$('#editTimeStart').append('<option value="' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '</option>');
+
+			$('#editTimeEnd').append('<option value="' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '</option>');
+			$('#editTimeEnd').append('<option value="' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '</option>');
+			$('#editTimeEnd').append('<option value="' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '</option>');
+			$('#editTimeEnd').append('<option value="' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '</option>');
+		}
+
+   		$("#editTimeStart option[value='" + calData.events[currentNode].startTime + "']").attr("selected","selected");
+   		$("#editTimeEnd option[value='" + calData.events[currentNode].endTime + "']").attr("selected","selected");
+
+
 		$('#eventModal').on('hidden.bs.modal', function () {
    			$('#eventModal').remove();
    		});
@@ -248,12 +242,11 @@ $( document ).ready(function() {
    		$('#submitChanges').click(function(){
    			$('#' + currentNode).remove();
    			delete calData.events[currentNode];
-   			console.log(calData);
-   			let editId = createId($('#editEvent').val() + $('#editTime').val() + $('#editPrice').val());
+   			let editId = createId($('#editEvent').val() + $('#editTimeStart').val() + $('#editTimeEnd').val());
    			calData.events[editId] = {};
 			let editTitle = calData.events[editId]['title'] = $('#editEvent').val();
-   			calData.events[editId]['time'] = $('#editTime').val();
-   			calData.events[editId]['price'] = $('#editPrice').val();
+   			calData.events[editId]['startTime'] = $('#editTimeStart').val();
+   			calData.events[editId]['endTime'] = $('#editTimeEnd').val();
    			calData.events[editId]['desc'] = $('#editDesc').val();
    			$('#eventDiv').append(
 				'<div id="' + editId + '" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#eventModal">' + editTitle + '</div>'
@@ -271,7 +264,7 @@ $( document ).ready(function() {
 
 
    	$('#saveNewEvent').click(function(){
-   		let eventId = 'e' + createId($('#rinkEvent').val() + $('#eventTime').val() + $('#eventPrice').val());
+   		let eventId = 'e' + createId($('#rinkEvent').val() + $('#eventTimeStart').val() + $('#eventTimeEnd').val());
 
    		if(eventId in calData){
    			alert('Event with same title, time & price already exist.');
@@ -280,8 +273,8 @@ $( document ).ready(function() {
    		else{
    			calData.events[eventId] = {};
    			let eventTitle = calData.events[eventId]['title'] = $('#rinkEvent').val();
-   			let eventTime = calData.events[eventId]['time'] = $('#eventTime').val();
-   			let eventPrice = calData.events[eventId]['price'] = $('#eventPrice').val();
+   			let eventStart = calData.events[eventId]['startTime'] = $('#eventTimeStart').val();
+   			let eventEnd = calData.events[eventId]['endTime'] = $('#eventTimeEnd').val()
    			let eventDesc = calData.events[eventId]['desc'] = $('#eventDesc').val();
    			console.log(calData);
 	   		$('#eventDiv').append(

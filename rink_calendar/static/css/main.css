@@ -1,13 +1,15 @@
 body {
-	font-family: 'Russo One', sans-serif;
+	
 }
 
 table {
+	font-family: 'Russo One', sans-serif;
 	margin-left: auto;
 	margin-right: auto;
 }
 
 #month-header {
+	font-family: 'Russo One', sans-serif;
 	color: rgba(73,155,234,1);
 	margin: 40px 0px 25px 0px;
 }
@@ -46,4 +48,8 @@ th {
 	margin-top: 50px;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.form-price {
+	width: 50%;
 }
