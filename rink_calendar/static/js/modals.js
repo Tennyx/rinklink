@@ -29,6 +29,22 @@ const createModal =
 	            			<label for="eventDesc" class="form-control-label">Description:</label>\
 	            			<textarea class="form-control" id="eventDesc"></textarea>\
 	          			</div>\
+	          			<div class="form-group">\
+	          				<label for="eventColor" class="form-control-label">Color:</label>\
+	          				\
+	          				<div class="btn-group" data-toggle="buttons">\
+							  <label class="btn btn-primary active">\
+							    <input type="radio" name="options" id="option1" autocomplete="off" checked>TEST\
+							  </label>\
+							  <label class="btn btn-success">\
+							    <input type="radio" name="options" id="option2" autocomplete="off">TEST\
+							  </label>\
+							  <label class="btn btn-warning">\
+							    <input type="radio" name="options" id="option3" autocomplete="off">TEST\
+							  </label>\
+							</div>\
+	          				\
+	          			</div>\
 	        		</form>\
 					</div>\
 					<div class="modal-footer">\
