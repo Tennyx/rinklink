@@ -261,7 +261,10 @@ $( document ).ready(function() {
    		});
    	});
 
-
+	$('.dropdown-menu button').click(function(){
+		let eventColorPick = $(this).css("background-color");
+		$('#eventMainColor').css('background', eventColorPick);
+	});
 
    	$('#saveNewEvent').click(function(){
    		let eventId = 'e' + createId($('#rinkEvent').val() + $('#eventTimeStart').val() + $('#eventTimeEnd').val());
@@ -276,9 +279,10 @@ $( document ).ready(function() {
    			let eventStart = calData.events[eventId]['startTime'] = $('#eventTimeStart').val();
    			let eventEnd = calData.events[eventId]['endTime'] = $('#eventTimeEnd').val()
    			let eventDesc = calData.events[eventId]['desc'] = $('#eventDesc').val();
+   			let eventColor = calData.events[eventId]['color'] = $('#eventMainColor').css("background-color");
    			console.log(calData);
 	   		$('#eventDiv').append(
-				'<div id="' + eventId + '" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#eventModal">' + eventTitle + '</div>'
+				'<div id="' + eventId + '"' + 'style="background-color:' + eventColor + '" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#eventModal">' + eventTitle + '</div>'
 			);
 	   	}
 	   	

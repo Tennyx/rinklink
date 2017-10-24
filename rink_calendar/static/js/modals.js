@@ -29,22 +29,29 @@ const createModal =
 	            			<label for="eventDesc" class="form-control-label">Description:</label>\
 	            			<textarea class="form-control" id="eventDesc"></textarea>\
 	          			</div>\
+	          			\
 	          			<div class="form-group">\
 	          				<label for="eventColor" class="form-control-label">Color:</label>\
-	          				\
-	          				<div class="btn-group" data-toggle="buttons">\
-							  <label class="btn btn-primary active">\
-							    <input type="radio" name="options" id="option1" autocomplete="off" checked>TEST\
-							  </label>\
-							  <label class="btn btn-success">\
-							    <input type="radio" name="options" id="option2" autocomplete="off">TEST\
-							  </label>\
-							  <label class="btn btn-warning">\
-							    <input type="radio" name="options" id="option3" autocomplete="off">TEST\
-							  </label>\
+		          			<div class="btn-group">\
+							  <button type="button" class="btn btn-secondary" id="eventMainColor"> </button>\
+							  <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
+							    <span class="sr-only">Toggle Dropdown</span>\
+							  </button>\
+							  <div class="dropdown-menu" id="eventColor">\
+							    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\
+								  <div class="btn-group mr-2 ml-2" role="group" aria-label="First group">\
+								    <button type="button" class="btn btn-secondary" style="background:red"></button>\
+								    <button type="button" class="btn btn-secondary" style="background:orange"></button>\
+								    <button type="button" class="btn btn-secondary" style="background:yellow"></button>\
+								    <button type="button" class="btn btn-secondary" style="background:blue">3</button>\
+								    <button type="button" class="btn btn-secondary" style="background:green"></button>\
+								    <button type="button" class="btn btn-secondary" style="background:purple"></button>\
+								  </div>\
+								</div>\
+							  </div>\
 							</div>\
-	          				\
-	          			</div>\
+						</div>\
+						\
 	        		</form>\
 					</div>\
 					<div class="modal-footer">\
