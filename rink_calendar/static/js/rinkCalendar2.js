@@ -19,6 +19,36 @@ function createId(data){
 	return newId;
 }
 
+function createEventDisplay(title, timeStart, timeEnd){
+    let startHour = timeStart.split(':')[0]
+    let startMinutes = timeStart.split(':')[1];
+    let endHour = timeEnd.split(':')[0];
+    let endMinutes = timeEnd.split(':')[1];
+    let displayTitle = title.substring(0,10);
+    let startDisplay = '';
+    let endDisplay = '';
+    
+    if(title.length > 10){
+        displayTitle += '...'
+    } 
+    
+    if((endMinutes[0] || endMinutes[1]) > 0){
+        endDisplay = endHour + ':' + endMinutes.substring(0,3);
+    }
+    else{
+        endDisplay = endHour + endMinutes[2];
+    }
+    
+    if((startMinutes[0] || startMinutes[1]) > 0){
+        startDisplay = startHour + ':' + startMinutes.substring(0,3);
+    }
+    else{
+        startDisplay = startHour + startMinutes[2];
+    }
+    
+    return displayTitle + ' ' + startDisplay + '-' + endDisplay;
+}
+
 function allowDrop(ev) {
     ev.preventDefault();
 }
@@ -207,6 +237,27 @@ $( document ).ready(function() {
 			            			<label for="editDesc" class="form-control-label">Description:</label>\
 			            			<textarea class="form-control" id="editDesc">' + calData.events[currentNode].desc + '</textarea>\
 			          			</div>\
+			          			<div class="form-group">\
+			          				<label for="editColor" class="form-control-label">Color:</label>\
+				          			<div class="btn-group">\
+									  <button type="button" class="btn btn-secondary" id="editMainColor" style="background-color:' + calData.events[currentNode].color + '"> </button>\
+									  <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
+									    <span class="sr-only">Toggle Dropdown</span>\
+									  </button>\
+									  <div class="dropdown-menu" id="editColor">\
+									    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\
+										  <div class="btn-group mr-2 ml-2" role="group" aria-label="First group">\
+										    <button type="button" class="btn btn-secondary" style="background:red"></button>\
+										    <button type="button" class="btn btn-secondary" style="background:orange"></button>\
+										    <button type="button" class="btn btn-secondary" style="background:yellow"></button>\
+										    <button type="button" class="btn btn-secondary" style="background:blue">3</button>\
+										    <button type="button" class="btn btn-secondary" style="background:green"></button>\
+										    <button type="button" class="btn btn-secondary" style="background:purple"></button>\
+										  </div>\
+										</div>\
+									  </div>\
+									</div>\
+								</div>\
 			        		</form>\
 						</div>\
 						<div class="modal-footer">\
@@ -235,21 +286,29 @@ $( document ).ready(function() {
 		$('#eventModal').on('hidden.bs.modal', function () {
    			$('#eventModal').remove();
    		});
+   		
    		$('#editModal').on('hidden.bs.modal', function () {
    			$('#editModal').remove();
    		});
 
+   		$('.dropdown-menu button').click(function(){
+			let editColorPick = $(this).css("background-color");
+			$('#editMainColor').css('background', editColorPick);
+		});
+
+
    		$('#submitChanges').click(function(){
-   			$('#' + currentNode).remove();
    			delete calData.events[currentNode];
    			let editId = createId($('#editEvent').val() + $('#editTimeStart').val() + $('#editTimeEnd').val());
    			calData.events[editId] = {};
 			let editTitle = calData.events[editId]['title'] = $('#editEvent').val();
-   			calData.events[editId]['startTime'] = $('#editTimeStart').val();
-   			calData.events[editId]['endTime'] = $('#editTimeEnd').val();
+			let editColor = calData.events[editId]['color'] = $('#editMainColor').css("background-color");
+   			let editStart = calData.events[editId]['startTime'] = $('#editTimeStart').val();
+   			let editEnd = calData.events[editId]['endTime'] = $('#editTimeEnd').val();
    			calData.events[editId]['desc'] = $('#editDesc').val();
-   			$('#eventDiv').append(
-				'<div id="' + editId + '" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#eventModal">' + editTitle + '</div>'
+   			
+   			$('#' + currentNode).replaceWith(
+				'<div id="' + editId + '"' + 'style="background-color:' + editColor + '" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#eventModal">' + createEventDisplay(editTitle, editStart, editEnd) + '</div>'
 			);
 			$('#eventModal').on('hidden.bs.modal', function () {
    				$('#eventModal').remove();
@@ -282,12 +341,14 @@ $( document ).ready(function() {
    			let eventColor = calData.events[eventId]['color'] = $('#eventMainColor').css("background-color");
    			console.log(calData);
 	   		$('#eventDiv').append(
-				'<div id="' + eventId + '"' + 'style="background-color:' + eventColor + '" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#eventModal">' + eventTitle + '</div>'
+				'<div id="' + eventId + '"' + 'style="background-color:' + eventColor + '" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#eventModal">' + createEventDisplay(eventTitle, eventStart, eventEnd) + '</div>'
 			);
 	   	}
 	   	
 	   	$('#createEventMod').on('hidden.bs.modal', function () {
-    		$(this).find("input,textarea,select").val('').end();
+    		$(this).find("input,textarea").val('').end();
+    		$(this).find("select").val('12:00pm');
+    		$('#eventMainColor').css("background-color", '');
     		$('#eventModal').remove();
     		$('#editModal').remove();
 		});
