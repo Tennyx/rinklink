@@ -19,8 +19,8 @@ th {
 }
 
 .cellShell {
-	height: 100px;
-	width: 100px;
+	height: 150px;
+	width: 150px;
 	border: solid .5px #e2e0e0;
 	vertical-align: top;
 }

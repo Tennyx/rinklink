@@ -24,11 +24,11 @@ function createEventDisplay(title, timeStart, timeEnd){
     let startMinutes = timeStart.split(':')[1];
     let endHour = timeEnd.split(':')[0];
     let endMinutes = timeEnd.split(':')[1];
-    let displayTitle = title.substring(0,10);
+    let displayTitle = title.substring(0,15);
     let startDisplay = '';
     let endDisplay = '';
     
-    if(title.length > 10){
+    if(title.length > 15){
         displayTitle += '...'
     } 
     
@@ -204,6 +204,7 @@ $( document ).ready(function() {
 			        'Description: ' + calData.events[currentNode].desc + '<br>' +
 			      '</div>\
 			      <div class="modal-footer">\
+			      	<button type="button" id="deleteEvent" class="btn btn-danger" data-dismiss="modal">Delete Event</button>\
 			        <button id="editEvent" type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-dismiss="modal">EDIT</button>\
 			      </div>\
 			    </div>\
@@ -296,10 +297,14 @@ $( document ).ready(function() {
 			$('#editMainColor').css('background', editColorPick);
 		});
 
+   		$('#deleteEvent').click(function(){
+   			delete calData.events[currentNode];
+   			$('#' + currentNode).remove();
+   		});
 
    		$('#submitChanges').click(function(){
    			delete calData.events[currentNode];
-   			let editId = createId($('#editEvent').val() + $('#editTimeStart').val() + $('#editTimeEnd').val());
+   			let editId = 'e' + createId($('#editEvent').val() + $('#editTimeStart').val() + $('#editTimeEnd').val());
    			calData.events[editId] = {};
 			let editTitle = calData.events[editId]['title'] = $('#editEvent').val();
 			let editColor = calData.events[editId]['color'] = $('#editMainColor').css("background-color");
