@@ -40,12 +40,12 @@ const createModal =
 							  <div class="dropdown-menu" id="eventColor">\
 							    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\
 								  <div class="btn-group mr-2 ml-2" role="group" aria-label="First group">\
-								    <button type="button" class="btn btn-secondary" style="background:red"></button>\
-								    <button type="button" class="btn btn-secondary" style="background:orange"></button>\
-								    <button type="button" class="btn btn-secondary" style="background:yellow"></button>\
-								    <button type="button" class="btn btn-secondary" style="background:blue">3</button>\
-								    <button type="button" class="btn btn-secondary" style="background:green"></button>\
-								    <button type="button" class="btn btn-secondary" style="background:purple"></button>\
+								    <button type="button" class="btn btn-secondary" style="background:#ef5858"></button>\
+								    <button type="button" class="btn btn-secondary" style="background:#ed9344"></button>\
+								    <button type="button" class="btn btn-secondary" style="background:#efec34"></button>\
+								    <button type="button" class="btn btn-secondary" style="background:#35d130">3</button>\
+								    <button type="button" class="btn btn-secondary" style="background:#3d5fe5"></button>\
+								    <button type="button" class="btn btn-secondary" style="background:#8623aa"></button>\
 								  </div>\
 								</div>\
 							  </div>\

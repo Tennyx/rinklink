@@ -40,8 +40,10 @@ th {
 	height: 20px;
 	width: 150px;
 	font-size: 12px;
-	border-radius: 4px;
+	/*border-radius: 4px;*/
 	padding: 4px;
+	box-shadow: 1px 1px 5px #aaaaaa;
+	color:white;
 }
 
 #btnDiv {
