@@ -5,6 +5,7 @@ let calData = {
 				months: {},
 				events: {}
 			};
+let toggleSort = false;
 
 function createId(data){
 	let acceptableChar = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -24,11 +25,11 @@ function createEventDisplay(title, timeStart, timeEnd){
     let startMinutes = timeStart.split(':')[1];
     let endHour = timeEnd.split(':')[0];
     let endMinutes = timeEnd.split(':')[1];
-    let displayTitle = title.substring(0,15);
+    let displayTitle = title.substring(0,10);
     let startDisplay = '';
     let endDisplay = '';
     
-    if(title.length > 15){
+    if(title.length > 10){
         displayTitle += '...'
     } 
     
@@ -46,7 +47,7 @@ function createEventDisplay(title, timeStart, timeEnd){
         startDisplay = startHour + startMinutes[2];
     }
     
-    return displayTitle + ' ' + startDisplay + '-' + endDisplay;
+    return displayTitle + ' ' + '<span class="time-display">' + startDisplay + '-' + endDisplay + '</span>';
 }
 
 function allowDrop(ev) {
@@ -139,6 +140,8 @@ function createCal(date){
 $( document ).ready(function() {
 
 	$('#eventDiv').append(createModal);
+	$( ".sortable" ).sortable();
+	$( ".sortable" ).sortable( "option", "disabled", true );
 
 	for(i=0;i<timeArr.length;i++){
 		$('#eventTimeStart').append('<option value="' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '</option>');
@@ -357,7 +360,22 @@ $( document ).ready(function() {
     		$('#eventModal').remove();
     		$('#editModal').remove();
 		});
+	});
 
+
+	
+
+	$('#toggle-sort').click(function(){
+		if(toggleSort){
+			$('#toggle-sort').css('background-color', 'white');
+			toggleSort = false;
+			$( ".sortable" ).sortable( "option", "disabled", true );
+		}
+		else{
+			$('#toggle-sort').css('background-color', '#77abff');
+			toggleSort = true;
+			$( ".sortable" ).sortable( "option", "disabled", false );
+		}
 	});
 
 });
