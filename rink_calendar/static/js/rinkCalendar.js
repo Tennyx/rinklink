@@ -207,12 +207,25 @@ $( document ).ready(function() {
 			        'Description: ' + calData.events[currentNode].desc + '<br>' +
 			      '</div>\
 			      <div class="modal-footer">\
-			      	<button type="button" id="deleteEvent" class="btn btn-danger" data-dismiss="modal">Delete Event</button>\
+			      	<button type="button" id="verifyBtn" class="btn btn-danger" data-toggle="modal" data-target="#verifyModal" data-dismiss="modal">Delete Event</button>\
 			        <button id="editEvent" type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-dismiss="modal">EDIT</button>\
 			      </div>\
 			    </div>\
 			  </div>\
 			</div>\
+			\
+			<div class="modal fade" id="verifyModal">\
+			  <div class="modal-dialog" role="document">\
+			    <div class="modal-content">\
+			      <div class="modal-body">\
+			        <h6 class="text-center">Are you sure you want to delete this event?</h6>\
+			      	<button type="button" id="deleteEvent" class="btn btn-danger" data-dismiss="modal">Yes</button>\
+			        <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>\
+			      </div>\
+			    </div>\
+			  </div>\
+			</div>\
+			\
 			<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">\
 				<div class="modal-dialog" role="document">\
 					<div class="modal-content">\
@@ -251,6 +264,7 @@ $( document ).ready(function() {
 									  <div class="dropdown-menu" id="editColor">\
 									    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\
 										  <div class="btn-group mr-2 ml-2" role="group" aria-label="First group">\
+										  	<button type="button" class="btn btn-secondary" style="background:#bfbdbd"></button>\
 										    <button type="button" class="btn btn-secondary" style="background:red"></button>\
 										    <button type="button" class="btn btn-secondary" style="background:orange"></button>\
 										    <button type="button" class="btn btn-secondary" style="background:yellow"></button>\
@@ -356,7 +370,7 @@ $( document ).ready(function() {
 	   	$('#createEventMod').on('hidden.bs.modal', function () {
     		$(this).find("input,textarea").val('').end();
     		$(this).find("select").val('12:00pm');
-    		$('#eventMainColor').css("background-color", '');
+    		$('#eventMainColor').css("background-color", '#bfbdbd');
     		$('#eventModal').remove();
     		$('#editModal').remove();
 		});

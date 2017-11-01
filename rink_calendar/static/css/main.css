@@ -1,5 +1,5 @@
 body {
-	
+		
 }
 
 table {
@@ -40,7 +40,7 @@ th {
 	height: 20px;
 	width: 150px;
 	font-size: 12px;
-	/*border-radius: 4px;*/
+	border-radius: 4px;
 	padding: 4px;
 	box-shadow: 1px 1px 5px #aaaaaa;
 	color:white;
@@ -77,3 +77,38 @@ th {
 	float: right;
 	vertical-align: center;
 }
+
+/*.gray-highlight {
+	background-color:#bfbdbd;
+}
+
+.red-highlight {
+	background-color:#ef5858;
+}
+								    
+.orange-highlight {
+	background-color:#ed9344;
+}
+
+.yellow-highlight {
+	background-color:#e2db09;
+}
+
+.green-highlight {
+	background-color:#35d130;
+}
+
+.blue-highlight {
+	background-color:#3c7de5;
+}
+								
+.purple-highlight {
+	background-color:#9737ba;
+}
+*/
+
+
+
+
+
+

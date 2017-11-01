@@ -33,19 +33,20 @@ const createModal =
 	          			<div class="form-group">\
 	          				<label for="eventColor" class="form-control-label">Color:</label>\
 		          			<div class="btn-group">\
-							  <button type="button" class="btn btn-secondary" id="eventMainColor"> </button>\
+							  <button type="button" class="btn btn-secondary" id="eventMainColor" style="background:#bfbdbd"> </button>\
 							  <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
 							    <span class="sr-only">Toggle Dropdown</span>\
 							  </button>\
 							  <div class="dropdown-menu" id="eventColor">\
 							    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\
 								  <div class="btn-group mr-2 ml-2" role="group" aria-label="First group">\
-								    <button type="button" class="btn btn-secondary" style="background:#ef5858"></button>\
-								    <button type="button" class="btn btn-secondary" style="background:#ed9344"></button>\
-								    <button type="button" class="btn btn-secondary" style="background:#efec34"></button>\
-								    <button type="button" class="btn btn-secondary" style="background:#35d130">3</button>\
-								    <button type="button" class="btn btn-secondary" style="background:#3d5fe5"></button>\
-								    <button type="button" class="btn btn-secondary" style="background:#8623aa"></button>\
+								  	<button type="button" class="btn btn-secondary gray-highlight"></button>\
+								    <button type="button" class="btn btn-secondary red-highlight" style="background:#ef5858"></button>\
+								    <button type="button" class="btn btn-secondary orange-highlight" style="background:#ed9344"></button>\
+								    <button type="button" class="btn btn-secondary yellow-highlight" style="background:#e2db09"></button>\
+								    <button type="button" class="btn btn-secondary green-highlight" style="background:#35d130">3</button>\
+								    <button type="button" class="btn btn-secondary blue-highlight" style="background:#3c7de5"></button>\
+								    <button type="button" class="btn btn-secondary purple-highlight" style="background:#9737ba"></button>\
 								  </div>\
 								</div>\
 							  </div>\
