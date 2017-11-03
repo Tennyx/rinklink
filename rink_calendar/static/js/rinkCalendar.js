@@ -139,21 +139,8 @@ function createCal(date){
 
 $( document ).ready(function() {
 
-	$('#eventDiv').append(createModal);
 	$( ".sortable" ).sortable();
 	$( ".sortable" ).sortable( "option", "disabled", true );
-
-	for(i=0;i<timeArr.length;i++){
-		$('#eventTimeStart').append('<option value="' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '</option>');
-		$('#eventTimeStart').append('<option value="' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '</option>');
-		$('#eventTimeStart').append('<option value="' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '</option>');
-		$('#eventTimeStart').append('<option value="' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '</option>');
-
-		$('#eventTimeEnd').append('<option value="' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '</option>');
-		$('#eventTimeEnd').append('<option value="' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '</option>');
-		$('#eventTimeEnd').append('<option value="' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '</option>');
-		$('#eventTimeEnd').append('<option value="' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '</option>');
-	}
 
 	createCal();
 	
@@ -190,6 +177,7 @@ $( document ).ready(function() {
    	$('#eventDiv').on('click','.cellData',function(){
    		
    		let currentNode = this.id;
+   		console.log(currentNode);
 
    		$('#eventDiv').append(
 	   		'<div class="modal fade" id="eventModal">\
@@ -212,21 +200,12 @@ $( document ).ready(function() {
 			      </div>\
 			    </div>\
 			  </div>\
-			</div>\
-			\
-			<div class="modal fade" id="verifyModal">\
-			  <div class="modal-dialog" role="document">\
-			    <div class="modal-content">\
-			      <div class="modal-body">\
-			        <h6 class="text-center">Are you sure you want to delete this event?</h6>\
-			      	<button type="button" id="deleteEvent" class="btn btn-danger" data-dismiss="modal">Yes</button>\
-			        <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>\
-			      </div>\
-			    </div>\
-			  </div>\
-			</div>\
-			\
-			<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">\
+			</div>'
+			);
+
+   		$('#editEvent').click(function(){
+   			$('#eventDiv').append(
+   				'<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">\
 				<div class="modal-dialog" role="document">\
 					<div class="modal-content">\
 						<div class="modal-header">\
@@ -283,96 +262,124 @@ $( document ).ready(function() {
 						</div>\
 					</div>\
 				</div>\
-			</div>');
+			</div>'
+   			);
 
-   		for(i=0;i<timeArr.length;i++){
-			$('#editTimeStart').append('<option value="' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '</option>');
-			$('#editTimeStart').append('<option value="' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '</option>');
-			$('#editTimeStart').append('<option value="' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '</option>');
-			$('#editTimeStart').append('<option value="' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '</option>');
+   			for(i=0;i<timeArr.length;i++){
+				$('#editTimeStart').append('<option value="' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '</option>');
+				$('#editTimeStart').append('<option value="' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '</option>');
+				$('#editTimeStart').append('<option value="' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '</option>');
+				$('#editTimeStart').append('<option value="' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '</option>');
+				$('#editTimeEnd').append('<option value="' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '</option>');
+				$('#editTimeEnd').append('<option value="' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '</option>');
+				$('#editTimeEnd').append('<option value="' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '</option>');
+				$('#editTimeEnd').append('<option value="' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '</option>');
+			}
 
-			$('#editTimeEnd').append('<option value="' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '</option>');
-			$('#editTimeEnd').append('<option value="' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '</option>');
-			$('#editTimeEnd').append('<option value="' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '</option>');
-			$('#editTimeEnd').append('<option value="' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '</option>');
-		}
+   			$("#editTimeStart option[value='" + calData.events[currentNode].startTime + "']").attr("selected","selected");
+   			$("#editTimeEnd option[value='" + calData.events[currentNode].endTime + "']").attr("selected","selected");
 
-   		$("#editTimeStart option[value='" + calData.events[currentNode].startTime + "']").attr("selected","selected");
-   		$("#editTimeEnd option[value='" + calData.events[currentNode].endTime + "']").attr("selected","selected");
+   			$('.dropdown-menu button').click(function(){
+				let editColorPick = $(this).css("background-color");
+				$('#editMainColor').css('background', editColorPick);
+			});
 
-
-		$('#eventModal').on('hidden.bs.modal', function () {
-   			$('#eventModal').remove();
-   		});
-   		
-   		$('#editModal').on('hidden.bs.modal', function () {
-   			$('#editModal').remove();
-   		});
-
-   		$('.dropdown-menu button').click(function(){
-			let editColorPick = $(this).css("background-color");
-			$('#editMainColor').css('background', editColorPick);
-		});
-
-   		$('#deleteEvent').click(function(){
-   			delete calData.events[currentNode];
-   			$('#' + currentNode).remove();
-   		});
-
-   		$('#submitChanges').click(function(){
-   			delete calData.events[currentNode];
-   			let editId = 'e' + createId($('#editEvent').val() + $('#editTimeStart').val() + $('#editTimeEnd').val());
-   			calData.events[editId] = {};
-			let editTitle = calData.events[editId]['title'] = $('#editEvent').val();
-			let editColor = calData.events[editId]['color'] = $('#editMainColor').css("background-color");
-   			let editStart = calData.events[editId]['startTime'] = $('#editTimeStart').val();
-   			let editEnd = calData.events[editId]['endTime'] = $('#editTimeEnd').val();
-   			calData.events[editId]['desc'] = $('#editDesc').val();
+			$('#submitChanges').click(function(){
+	   			delete calData.events[currentNode];
+	   			let editId = 'e' + createId($('#editEvent').val() + $('#editTimeStart').val() + $('#editTimeEnd').val());
+	   			calData.events[editId] = {};
+				let editTitle = calData.events[editId]['title'] = $('#editEvent').val();
+				let editColor = calData.events[editId]['color'] = $('#editMainColor').css("background-color");
+	   			let editStart = calData.events[editId]['startTime'] = $('#editTimeStart').val();
+	   			let editEnd = calData.events[editId]['endTime'] = $('#editTimeEnd').val();
+	   			calData.events[editId]['desc'] = $('#editDesc').val();
+	   			
+	   			$('#' + currentNode).replaceWith(
+					'<div id="' + editId + '"' + 'style="background-color:' + editColor + '" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#eventModal">' + createEventDisplay(editTitle, editStart, editEnd) + '</div>'
+				);
+			});
    			
-   			$('#' + currentNode).replaceWith(
-				'<div id="' + editId + '"' + 'style="background-color:' + editColor + '" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#eventModal">' + createEventDisplay(editTitle, editStart, editEnd) + '</div>'
-			);
-			$('#eventModal').on('hidden.bs.modal', function () {
-   				$('#eventModal').remove();
-   			});
    			$('#editModal').on('hidden.bs.modal', function () {
    				$('#editModal').remove();
    			});
+   		});
 
+   		$('#verifyBtn').click(function(){
+   			$('#eventDiv').append(
+   				'<div class="modal fade" id="verifyModal">\
+			  		<div class="modal-dialog" role="document">\
+			    		<div class="modal-content">\
+			      			<div class="modal-body">\
+			       			 <h6 class="text-center">Are you sure you want to delete this event?</h6>\
+			      			<button type="button" id="deleteEvent" class="btn btn-danger" data-dismiss="modal">Yes</button>\
+			        		<button type="button" class="btn btn-primary" data-dismiss="modal">No</button>\
+			      			</div>\
+			    		</div>\
+			  		</div>\
+				</div>'
+			);	
+
+			$('#deleteEvent').click(function(){
+   				delete calData.events[currentNode];
+   				$('#' + currentNode).remove();
+   			});
+
+   			$('#verifyModal').on('hidden.bs.modal', function () {
+   				$('#verifyModal').remove();
+   			});
+   		});
+
+		
+		$('#eventModal').on('hidden.bs.modal', function () {
+   			$('#eventModal').remove();
    		});
    	});
 
-	$('.dropdown-menu button').click(function(){
-		let eventColorPick = $(this).css("background-color");
-		$('#eventMainColor').css('background', eventColorPick);
-	});
+	
 
-   	$('#saveNewEvent').click(function(){
-   		let eventId = 'e' + createId($('#rinkEvent').val() + $('#eventTimeStart').val() + $('#eventTimeEnd').val());
+	$('#createEvent').click(function(){
 
-   		if(eventId in calData){
-   			alert('Event with same title, time & price already exist.');
-   			return;
-   		}
-   		else{
-   			calData.events[eventId] = {};
-   			let eventTitle = calData.events[eventId]['title'] = $('#rinkEvent').val();
-   			let eventStart = calData.events[eventId]['startTime'] = $('#eventTimeStart').val();
-   			let eventEnd = calData.events[eventId]['endTime'] = $('#eventTimeEnd').val()
-   			let eventDesc = calData.events[eventId]['desc'] = $('#eventDesc').val();
-   			let eventColor = calData.events[eventId]['color'] = $('#eventMainColor').css("background-color");
-   			console.log(calData);
-	   		$('#eventDiv').append(
-				'<div id="' + eventId + '"' + 'style="background-color:' + eventColor + '" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#eventModal">' + createEventDisplay(eventTitle, eventStart, eventEnd) + '</div>'
-			);
-	   	}
-	   	
-	   	$('#createEventMod').on('hidden.bs.modal', function () {
-    		$(this).find("input,textarea").val('').end();
-    		$(this).find("select").val('12:00pm');
-    		$('#eventMainColor').css("background-color", '#bfbdbd');
-    		$('#eventModal').remove();
-    		$('#editModal').remove();
+		$('#eventDiv').append(createModal);
+
+		for(i=0;i<timeArr.length;i++){
+			$('#eventTimeStart').append('<option value="' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '</option>');
+			$('#eventTimeStart').append('<option value="' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '</option>');
+			$('#eventTimeStart').append('<option value="' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '</option>');
+			$('#eventTimeStart').append('<option value="' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '</option>');
+			$('#eventTimeEnd').append('<option value="' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '</option>');
+			$('#eventTimeEnd').append('<option value="' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '</option>');
+			$('#eventTimeEnd').append('<option value="' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '</option>');
+			$('#eventTimeEnd').append('<option value="' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '</option>');
+		}
+
+		$('.dropdown-menu button').click(function(){
+			let eventColorPick = $(this).css("background-color");
+			$('#eventMainColor').css('background', eventColorPick);
+		});
+
+	   	$('#saveNewEvent').click(function(){
+	   		let eventId = 'e' + createId($('#rinkEvent').val() + $('#eventTimeStart').val() + $('#eventTimeEnd').val());
+
+	   		if(eventId in calData){
+	   			alert('Event with same title, time & price already exist.');
+	   			return;
+	   		}
+	   		else{
+	   			calData.events[eventId] = {};
+	   			let eventTitle = calData.events[eventId]['title'] = $('#rinkEvent').val();
+	   			let eventStart = calData.events[eventId]['startTime'] = $('#eventTimeStart').val();
+	   			let eventEnd = calData.events[eventId]['endTime'] = $('#eventTimeEnd').val()
+	   			let eventDesc = calData.events[eventId]['desc'] = $('#eventDesc').val();
+	   			let eventColor = calData.events[eventId]['color'] = $('#eventMainColor').css("background-color");
+	   			console.log(calData);
+		   		$('#eventDiv').append(
+					'<div id="' + eventId + '"' + 'style="background-color:' + eventColor + '" class="cellData" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#eventModal">' + createEventDisplay(eventTitle, eventStart, eventEnd) + '</div>'
+				);
+		   	}
+		});
+
+		$('#createEventMod').on('hidden.bs.modal', function () {
+	    	$('#createEventMod').remove();
 		});
 	});
 
