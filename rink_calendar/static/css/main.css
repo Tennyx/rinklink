@@ -13,22 +13,8 @@ table {
 	margin: 40px 0px 25px 0px;
 }
 
-.dateNum {
+.date-num {
 	font-family: 'Russo One', sans-serif;
-}
-
-th {
-	color: rgba(73,155,234,1);
-}
-
-.cellShell {
-	height: 150px;
-	width: 150px;
-	border: solid .5px #e2e0e0;
-	vertical-align: top;
-}
-
-.dateNum {
 	padding: 5px 0px 18px 5px;
 	height: 20%;
 	font-size: 70%;
@@ -36,7 +22,18 @@ th {
 	color: white;
 }
 
-.cellData {
+th {
+	color: rgba(73,155,234,1);
+}
+
+.cell-shell {
+	height: 150px;
+	width: 150px;
+	border: solid .5px #e2e0e0;
+	vertical-align: top;
+}
+
+.cell-data {
 	height: 20px;
 	width: 150px;
 	font-size: 12px;
@@ -46,12 +43,13 @@ th {
 	color:white;
 }
 
-#btnDiv {
+#cycle-holder {
 	margin-top: 50px
 }
 
-#eventDiv {
-	width: 50%;
+#event-div {
+	height: 400px;
+	width: 400px;
 	margin-top: 50px;
 	margin-left: auto;
 	margin-right: auto;
@@ -65,11 +63,6 @@ th {
 	background-color: white;
 	border: none;
 	outline: none;
-}
-
-#eventDiv {
-	height: 400px;
-	width: 400px;
 }
 
 .time-display {
