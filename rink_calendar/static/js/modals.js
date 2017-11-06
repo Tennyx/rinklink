@@ -1,65 +1,3 @@
-const createModal = 
-		'<div class="modal fade" id="create-event-modal" tabindex="-1" role="dialog" aria-labelledby="createEventLabel" aria-hidden="true">\
-			<div class="modal-dialog" role="document">\
-				<div class="modal-content">\
-					<div class="modal-header">\
-						<h5 class="modal-title" id="createEventLabel">New Event</h5>\
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-							<span aria-hidden="true">&times;</span>\
-						</button>\
-					</div>\
-					<div class="modal-body">\
-		        	<form>\
-	          			<div class="form-group">\
-	            			<label for="rinkEvent" class="form-control-label">Event Title:</label>\
-	            			<input type="text" class="form-control" id="rinkEvent">\
-	          			</div>\
-	          			<div class="form-group">\
-	            			<label for="eventTimeStart" class="form-control-label">Time:</label>\
-	            			<select id="eventTimeStart">\
-	            				\
-	            			</select> to \
-	            			<select id="eventTimeEnd">\
-	            				\
-	            			</select>\
-	          			</div>\
-	         			<div class="form-group">\
-	            			<label for="eventDesc" class="form-control-label">Description:</label>\
-	            			<textarea class="form-control" id="eventDesc"></textarea>\
-	          			</div>\
-	          			\
-	          			<div class="form-group">\
-	          				<label for="eventColor" class="form-control-label">Color:</label>\
-		          			<div class="btn-group">\
-							  <button type="button" class="btn btn-secondary" id="eventMainColor" style="background:#bfbdbd"> </button>\
-							  <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
-							    <span class="sr-only">Toggle Dropdown</span>\
-							  </button>\
-							  <div class="dropdown-menu" id="eventColor">\
-							    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\
-								  <div class="btn-group mr-2 ml-2" role="group" aria-label="First group">\
-								  	<button type="button" class="btn btn-secondary gray-highlight" style="background:#bfbdbd"></button>\
-								    <button type="button" class="btn btn-secondary red-highlight" style="background:#ef5858"></button>\
-								    <button type="button" class="btn btn-secondary orange-highlight" style="background:#ed9344"></button>\
-								    <button type="button" class="btn btn-secondary yellow-highlight" style="background:#e2db09"></button>\
-								    <button type="button" class="btn btn-secondary green-highlight" style="background:#35d130">3</button>\
-								    <button type="button" class="btn btn-secondary blue-highlight" style="background:#3c7de5"></button>\
-								    <button type="button" class="btn btn-secondary purple-highlight" style="background:#9737ba"></button>\
-								  </div>\
-								</div>\
-							  </div>\
-							</div>\
-						</div>\
-						\
-	        		</form>\
-					</div>\
-					<div class="modal-footer">\
-						<button id="save-new-event" type="button" class="btn btn-primary" data-dismiss="modal">Create Event</button>\
-					</div>\
-				</div>\
-			</div>\
-		</div>';
-
 const verifyModal =
 		'<div class="modal fade" id="verify-modal">\
 			  	<div class="modal-dialog" role="document">\
@@ -71,7 +9,7 @@ const verifyModal =
 			      		</div>\
 			    	</div>\
 			  	</div>\
-		</div>'
+		</div>';
 
 function eventModal(evTitle, evStart, evEnd, evDesc){
 	let eventStr = 
@@ -101,13 +39,26 @@ function eventModal(evTitle, evStart, evEnd, evDesc){
 
 }
 
-function editModal(edTitle, edDesc, edColor){
+function editModal(edTitle, edDesc, edColor, modTitle, btnText){
+
+	const timeArr = [12,1,2,3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7,8,9,10,11];
+
+	let timeGen = '';
+
+	for(i=0;i<timeArr.length;i++){
+			timeGen +=
+			'<option value="' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':00' + (i<12 ? 'pm' : 'am') + '</option>'+
+			'<option value="' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':15' + (i<12 ? 'pm' : 'am') + '</option>'+
+			'<option value="' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':30' + (i<12 ? 'pm' : 'am') + '</option>'+
+			'<option value="' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '">' + timeArr[i] + ':45' + (i<12 ? 'pm' : 'am') + '</option>'
+	}
+
 	let editStr = 
 		'<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="event-modalLabel" aria-hidden="true">\
 			<div class="modal-dialog" role="document">\
 				<div class="modal-content">\
 					<div class="modal-header">\
-						<h5 class="modal-title" id="event-modalLabel">Modal title</h5>\
+						<h5 class="modal-title" id="event-modalLabel">' + modTitle + '</h5>\
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">\
 							<span aria-hidden="true">&times;</span>\
 						</button>\
@@ -120,34 +71,34 @@ function editModal(edTitle, edDesc, edColor){
 			          		</div>\
 			          		<div class="form-group">\
 			            		<label for="edit-time-start" class="form-control-label">Time:</label>\
-			            		<select id="edit-time-start"> to\
-	            				\
-	            				</select>\
-	            				<select id="edit-time-end">\
-			            		\
-			            		</select>\
+			            		<select id="edit-time-start"> to' + timeGen +
+	            				
+	            				'</select>\
+	            				<select id="edit-time-end">' + timeGen +
+			            		
+			            		'</select>\
 			          		</div>\
 			         		<div class="form-group">\
-			            		<label for="editDesc" class="form-control-label">Description:</label>\
-			            		<textarea class="form-control" id="editDesc">' + edDesc + '</textarea>\
+			            		<label for="edit-desc" class="form-control-label">Description:</label>\
+			            		<textarea class="form-control" id="edit-desc">' + edDesc + '</textarea>\
 			          		</div>\
 			          		<div class="form-group">\
-			          			<label for="editColor" class="form-control-label">Color:</label>\
+			          			<label for="edit-color" class="form-control-label">Color:</label>\
 				          		<div class="btn-group">\
-									<button type="button" class="btn btn-secondary" id="editMainColor" style="background-color:' + edColor + '"> </button>\
+									<button type="button" class="btn btn-secondary" id="edit-main-color" style="background-color:' + edColor + '"> </button>\
 									<button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
 										<span class="sr-only">Toggle Dropdown</span>\
 									</button>\
-									<div class="dropdown-menu" id="editColor">\
+									<div class="dropdown-menu" id="edit-color">\
 										<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">\
 											<div class="btn-group mr-2 ml-2" role="group" aria-label="First group">\
 											  	<button type="button" class="btn btn-secondary" style="background:#bfbdbd"></button>\
-											    <button type="button" class="btn btn-secondary" style="background:red"></button>\
-											    <button type="button" class="btn btn-secondary" style="background:orange"></button>\
-											    <button type="button" class="btn btn-secondary" style="background:yellow"></button>\
-											    <button type="button" class="btn btn-secondary" style="background:blue">3</button>\
-											    <button type="button" class="btn btn-secondary" style="background:green"></button>\
-											    <button type="button" class="btn btn-secondary" style="background:purple"></button>\
+											    <button type="button" class="btn btn-secondary" style="background:#ef5858"></button>\
+											    <button type="button" class="btn btn-secondary" style="background:#ed9344"></button>\
+											    <button type="button" class="btn btn-secondary" style="background:#e2db09"></button>\
+											    <button type="button" class="btn btn-secondary" style="background:#35d130">3</button>\
+											    <button type="button" class="btn btn-secondary" style="background:#3c7de5"></button>\
+											    <button type="button" class="btn btn-secondary" style="background:#9737ba"></button>\
 										  </div>\
 										</div>\
 									</div>\
@@ -156,7 +107,7 @@ function editModal(edTitle, edDesc, edColor){
 			        	</form>\
 					</div>\
 					<div class="modal-footer">\
-						<button type="button" id="submitChanges" class="btn btn-primary" data-dismiss="modal">Submit Changes</button>\
+						<button type="button" id="submit-changes" class="btn btn-primary" data-dismiss="modal">' + btnText + '</button>\
 					</div>\
 				</div>\
 			</div>\
