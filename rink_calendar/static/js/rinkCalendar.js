@@ -71,19 +71,29 @@ function drop(ev, el) {
     ev.preventDefault();
     let data = ev.dataTransfer.getData("text");
     let nodeMetaData = '';
+    let idCut = $('#' + data).parent().attr("id").length;
+    console.log(data);
 
-    if(document.getElementById(data).id[0] == 'e' || ev.altKey){
+    if(document.getElementById(data).id[0] == '_' || ev.altKey){
     	let nodeCopy = document.getElementById(data).cloneNode(true);
-    	
+    	console.log(nodeCopy.innerHTML);
 
-    	if(nodeCopy.id[0] === 'e'){
+    	if(nodeCopy.id[0] === '_'){
     		nodeMetaData = calData.events[nodeCopy.id];		
+    		nodeCopy.id = createId(ev.target.id + nodeCopy.id);
     	}
     	else{
     		nodeMetaData = calData.months[createId(monthHeader)][nodeCopy.id];
+    		nodeCopy.id = createId(ev.target.id + nodeCopy.id.substr(idCut));
+    		
+    		if(nodeCopy.id in calData.months[createId(monthHeader)]){
+    			nodeMetaData.title += ' copy';
+    			nodeCopy.id = createId(ev.target.id + nodeMetaData.title + nodeMetaData.startTime + nodeMetaData.endTime);
+    			nodeCopy.innerHTML = createEventDisplay(nodeMetaData.title, nodeMetaData.startTime, nodeMetaData.endTime);
+    		}
     	}
     	
-    	nodeCopy.id = createId(ev.target.id + nodeCopy.textContent);
+    	
     	el.appendChild(nodeCopy);
     	calData.months[createId(monthHeader)][nodeCopy.id] = {
     		'title': nodeMetaData.title,
@@ -99,7 +109,7 @@ function drop(ev, el) {
     	nodeMetaData = calData.months[createId(monthHeader)][nodeInd.id];
     	
     	delete calData.months[createId(monthHeader)][nodeInd.id];
-    	nodeInd.id = createId(ev.target.id + nodeInd.textContent);
+    	nodeInd.id = createId(ev.target.id + nodeInd.id.substr(idCut));
     	el.appendChild(nodeInd);
 
     	calData.months[createId(monthHeader)][nodeInd.id] = {
@@ -241,6 +251,73 @@ $( document ).ready(function() {
 			calData.months[createId(monthHeader)][calNode].endTime,
 			calData.months[createId(monthHeader)][calNode].desc
    		));
+
+   		$('#edit-event').click(function(){
+   			$('#event-div').append(editModal(
+   				calData.months[createId(monthHeader)][calNode].title,
+   				calData.months[createId(monthHeader)][calNode].desc,
+   				calData.months[createId(monthHeader)][calNode].color,
+   				'Edit Event',
+   				'Submit Changes'
+   			));
+
+   			$("#edit-time-start option[value='" + calData.months[createId(monthHeader)][calNode].startTime + "']").attr("selected","selected");
+   			$("#edit-time-end option[value='" + calData.months[createId(monthHeader)][calNode].endTime + "']").attr("selected","selected");
+
+   			$('.dropdown-menu button').click(function(){
+				let calColorPick = $(this).css("background-color");
+				$('#edit-main-color').css('background', calColorPick);
+			});
+
+			$('#submit-changes').click(function(){
+	   			delete calData.months[createId(monthHeader)][calNode];
+	   			let calId = $('#' + calNode).parent().attr("id") + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
+				let calTitle = $('#edit-event').val();
+				let calColor = $('#edit-main-color').css("background-color");
+	   			let calStart = $('#edit-time-start').val();
+	   			let calEnd = $('#edit-time-end').val();
+	   			let calDesc = $('#edit-desc').val();
+
+	   			if(calId in calData.months[createId(monthHeader)]){
+	   				alert('Event with same title, start & end date already exists for this date.');
+	   				return;
+    				// calId += 'copy';
+    			}
+	   			
+	   			calData.months[createId(monthHeader)][calId] = {
+		    		'title': calTitle,
+		    		'startTime': calStart,
+		    		'endTime': calEnd,
+		    		'desc': calDesc,
+		    		'color': calColor	
+		    	};
+	   			
+	   			$('#' + calNode).replaceWith(
+					'<div id="' + calId + '"' + 'style="background-color:' + calColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(calTitle, calStart, calEnd) + '</div>'
+				);
+			});
+   			
+   			$('#edit-modal').on('hidden.bs.modal', function () {
+   				$('#edit-modal').remove();
+   			});
+   		});
+
+   		$('#verify-btn').click(function(){
+   			$('#event-div').append(verifyModal);	
+
+			$('#delete-event').click(function(){
+   				delete calData.months[createId(monthHeader)][calNode];
+   				$('#' + calNode).remove();
+   			});
+
+   			$('#verify-modal').on('hidden.bs.modal', function () {
+   				$('#verify-modal').remove();
+   			});
+   		});
+
+   		$('#event-modal').on('hidden.bs.modal', function () {
+   			$('#event-modal').remove();
+   		});
    	});
 
    	//event list options
@@ -255,10 +332,10 @@ $( document ).ready(function() {
 		});
 
 	   	$('#submit-changes').click(function(){
-	   		let eventId = 'e' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
+	   		let eventId = '_' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
 
-	   		if(eventId in calData){
-	   			alert('Event with same title, time & price already exist.');
+	   		if(eventId in calData.events){
+	   			alert('Event with same title, start & end time already exists.');
 	   			return;
 	   		}
 	   		else{
@@ -313,7 +390,7 @@ $( document ).ready(function() {
 
 			$('#submit-changes').click(function(){
 	   			delete calData.events[currentNode];
-	   			let editId = 'e' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
+	   			let editId = '_' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
 	   			calData.events[editId] = {};
 				let editTitle = calData.events[editId]['title'] = $('#edit-event').val();
 				let editColor = calData.events[editId]['color'] = $('#edit-main-color').css("background-color");
