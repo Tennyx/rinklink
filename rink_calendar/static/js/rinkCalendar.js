@@ -97,8 +97,6 @@ function drop(ev, el) {
     	let nodeInd = document.getElementById(data);
 
     	nodeMetaData = calData.months[createId(monthHeader)][nodeInd.id];
-    	console.log(nodeInd.id);
-    	console.log(calData.months[createId(monthHeader)][nodeInd]);
     	
     	delete calData.months[createId(monthHeader)][nodeInd.id];
     	nodeInd.id = createId(ev.target.id + nodeInd.textContent);
@@ -234,8 +232,15 @@ $( document ).ready(function() {
    	//calendar actions
 
    	$('#rink-cal').on('click','.cell-data',function(){
-   		console.log(this.id);
    		console.log(calData);
+   		let calNode = this.id;
+
+   		$('#event-div').append(eventModal(
+			calData.months[createId(monthHeader)][calNode].title,
+			calData.months[createId(monthHeader)][calNode].startTime,
+			calData.months[createId(monthHeader)][calNode].endTime,
+			calData.months[createId(monthHeader)][calNode].desc
+   		));
    	});
 
    	//event list options
