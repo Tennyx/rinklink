@@ -72,25 +72,25 @@ function drop(ev, el) {
     let data = ev.dataTransfer.getData("text");
     let nodeMetaData = '';
     let idCut = $('#' + data).parent().attr("id").length;
-    console.log(data);
+    
+    
 
     if(document.getElementById(data).id[0] == '_' || ev.altKey){
     	let nodeCopy = document.getElementById(data).cloneNode(true);
-    	console.log(nodeCopy.innerHTML);
 
     	if(nodeCopy.id[0] === '_'){
-    		nodeMetaData = calData.events[nodeCopy.id];		
+    		nodeMetaData = jQuery.extend(true, {}, calData.events[nodeCopy.id]);		
     		nodeCopy.id = createId(ev.target.id + nodeCopy.id);
     	}
     	else{
-    		nodeMetaData = calData.months[createId(monthHeader)][nodeCopy.id];
+    		nodeMetaData = jQuery.extend(true, {}, calData.months[createId(monthHeader)][nodeCopy.id]);
     		nodeCopy.id = createId(ev.target.id + nodeCopy.id.substr(idCut));
-    		
-    		if(nodeCopy.id in calData.months[createId(monthHeader)]){
-    			nodeMetaData.title += ' copy';
-    			nodeCopy.id = createId(ev.target.id + nodeMetaData.title + nodeMetaData.startTime + nodeMetaData.endTime);
-    			nodeCopy.innerHTML = createEventDisplay(nodeMetaData.title, nodeMetaData.startTime, nodeMetaData.endTime);
-    		}
+    	}
+
+    	while(nodeCopy.id in calData.months[createId(monthHeader)]){
+			nodeMetaData.title += ' copy';
+			nodeCopy.id = createId(ev.target.id + nodeMetaData.title + nodeMetaData.startTime + nodeMetaData.endTime);
+			nodeCopy.innerHTML = createEventDisplay(nodeMetaData.title, nodeMetaData.startTime, nodeMetaData.endTime);
     	}
     	
     	
@@ -120,7 +120,8 @@ function drop(ev, el) {
     		'color': nodeMetaData.color	
     	};
     }
-    
+    let dropDiv = $('#' + ev.target.id).children('.cell-data');
+    console.log(dropDiv);
 }
 
 //creates calendar
@@ -281,7 +282,6 @@ $( document ).ready(function() {
 	   			if(calId in calData.months[createId(monthHeader)]){
 	   				alert('Event with same title, start & end date already exists for this date.');
 	   				return;
-    				// calId += 'copy';
     			}
 	   			
 	   			calData.months[createId(monthHeader)][calId] = {
