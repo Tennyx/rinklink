@@ -71,35 +71,29 @@ th {
 	vertical-align: center;
 }
 
-/*.gray-highlight {
-	background-color:#bfbdbd;
+/*.img-wrap {
+    position: relative;
+    display: inline-block;
+    font-size: 0;
 }
-
-.red-highlight {
-	background-color:#ef5858;
+.img-wrap .close {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: 100;
+    padding: 2px 2px 2px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0;
+    text-align: center;
+    font-size: 22px;
+    line-height: 10px;
+    border-radius: 50%;
 }
-								    
-.orange-highlight {
-	background-color:#ed9344;
-}
-
-.yellow-highlight {
-	background-color:#e2db09;
-}
-
-.green-highlight {
-	background-color:#35d130;
-}
-
-.blue-highlight {
-	background-color:#3c7de5;
-}
-								
-.purple-highlight {
-	background-color:#9737ba;
-}
-*/
-
+.img-wrap:hover .close {
+    opacity: .8;
+}*/
 
 
 

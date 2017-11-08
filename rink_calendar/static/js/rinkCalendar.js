@@ -57,6 +57,40 @@ function createEventDisplay(title, timeStart, timeEnd){
     return displayTitle + ' ' + '<span class="time-display">' + startDisplay + '-' + endDisplay + '</span>';
 }
 
+//sorts events by time
+
+function sortByTime(parentId){
+		
+	let sortTimeArr = [];
+
+    $('#' + parentId).children('.cell-data').each(function(){
+    	let timeCheck = calData.months[createId(monthHeader)][this.id].startTime;
+    	let sortHour = parseInt(timeCheck.split(':')[0]);
+    	let sortMin = timeCheck.split(':')[1].substr(0,2);
+    	let timeTotal = 0;
+
+    	if (timeCheck.indexOf('p') > -1 && sortHour !== 12){
+			sortHour += 12;
+		}
+
+		timeTotal = parseInt(sortHour.toString() + sortMin);
+		sortTimeArr.push({
+			'node': this,
+			'number': timeTotal
+		});
+	});
+
+    sortTimeArr = sortTimeArr.sort(function (a, b) {
+    	return parseFloat(a.number) - parseFloat(b.number);
+	});
+
+    $('#' + parentId).children('.cell-data').remove();
+
+    for(i=0;i<sortTimeArr.length;i++){
+    	$('#' + parentId).append(sortTimeArr[i].node);
+    }
+}
+
 //drag & Drop functions
 
 function allowDrop(ev) {
@@ -73,7 +107,9 @@ function drop(ev, el) {
     let nodeMetaData = '';
     let idCut = $('#' + data).parent().attr("id").length;
     
-    
+    if($('#' + ev.target.id).hasClass('cell-data') || $('#' + ev.target.id).hasClass('date-num')){
+    	return
+    }
 
     if(document.getElementById(data).id[0] == '_' || ev.altKey){
     	let nodeCopy = document.getElementById(data).cloneNode(true);
@@ -121,35 +157,7 @@ function drop(ev, el) {
     	};
     }
     
-    let sortTimeArr = [];
-
-    $('#' + ev.target.id).children('.cell-data').each(function(){
-    	let timeCheck = calData.months[createId(monthHeader)][this.id].startTime;
-    	let sortHour = parseInt(timeCheck.split(':')[0]);
-    	let sortMin = timeCheck.split(':')[1].substr(0,2);
-    	let timeTotal = 0;
-
-    	if (timeCheck.indexOf('p') > -1 && sortHour !== 12){
-			sortHour += 12;
-		}
-
-		timeTotal = parseInt(sortHour.toString() + sortMin);
-		sortTimeArr.push({
-			'node': this,
-			'number': timeTotal
-		});
-	});
-
-    sortTimeArr = sortTimeArr.sort(function (a, b) {
-    	return parseFloat(a.number) - parseFloat(b.number);
-	});
-
-    $('#' + ev.target.id).children('.cell-data').remove();
-
-    for(i=0;i<sortTimeArr.length;i++){
-    	console.log(sortTimeArr[i].node);
-    	$('#' + ev.target.id).append(sortTimeArr[i].node);
-    }
+	sortByTime(event.target.id);
 }
 
 //creates calendar
@@ -218,7 +226,8 @@ function createCal(date){
 
 	if(createId(monthHeader) in calData.months){
 		return
-	}else{
+	}
+	else{
 		calData.months[createId(monthHeader)] = {};	
 	}
 }
@@ -323,6 +332,8 @@ $( document ).ready(function() {
 	   			$('#' + calNode).replaceWith(
 					'<div id="' + calId + '"' + 'style="background-color:' + calColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(calTitle, calStart, calEnd) + '</div>'
 				);
+	
+				sortByTime($('#' + calId).parent().attr("id"));
 			});
    			
    			$('#edit-modal').on('hidden.bs.modal', function () {
@@ -389,8 +400,7 @@ $( document ).ready(function() {
    	$('#event-div').on('click','.cell-data',function(){
    		
    		let currentNode = this.id;
-   		console.log(currentNode);
-
+   		
    		$('#event-div').append(eventModal(
 			calData.events[currentNode].title,
 			calData.events[currentNode].startTime,
