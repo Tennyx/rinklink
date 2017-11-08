@@ -120,8 +120,36 @@ function drop(ev, el) {
     		'color': nodeMetaData.color	
     	};
     }
-    let dropDiv = $('#' + ev.target.id).children('.cell-data');
-    console.log(dropDiv);
+    
+    let sortTimeArr = [];
+
+    $('#' + ev.target.id).children('.cell-data').each(function(){
+    	let timeCheck = calData.months[createId(monthHeader)][this.id].startTime;
+    	let sortHour = parseInt(timeCheck.split(':')[0]);
+    	let sortMin = timeCheck.split(':')[1].substr(0,2);
+    	let timeTotal = 0;
+
+    	if (timeCheck.indexOf('p') > -1 && sortHour !== 12){
+			sortHour += 12;
+		}
+
+		timeTotal = parseInt(sortHour.toString() + sortMin);
+		sortTimeArr.push({
+			'node': this,
+			'number': timeTotal
+		});
+	});
+
+    sortTimeArr = sortTimeArr.sort(function (a, b) {
+    	return parseFloat(a.number) - parseFloat(b.number);
+	});
+
+    $('#' + ev.target.id).children('.cell-data').remove();
+
+    for(i=0;i<sortTimeArr.length;i++){
+    	console.log(sortTimeArr[i].node);
+    	$('#' + ev.target.id).append(sortTimeArr[i].node);
+    }
 }
 
 //creates calendar
