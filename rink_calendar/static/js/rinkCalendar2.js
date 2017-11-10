@@ -166,6 +166,7 @@ function drop(ev, el) {
     }
     
 	sortByTime(event.target.id);
+	data.clearData()
 }
 
 //creates calendar
@@ -277,6 +278,7 @@ $( document ).ready(function() {
    		monthVar = 0;	
    		monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
 		createCal(monthHeader);
+		console.log(calData);
    	});
 
    	$('#back').click(function(){
@@ -486,18 +488,21 @@ $( document ).ready(function() {
    		$('#event-div').append(verifyModal);	
 
 		$('#delete-event').click(function(){
-			delete calData.events[this.parentNode.childNodes[5].id];
+			delete calData.events[delNode.childNodes[5].id];
 			delNode.remove();
 		});
 
 		$('#verify-modal').on('hidden.bs.modal', function () {
    			$('#verify-modal').remove();
    		});
-   	});
+	});
 
    	$('#rink-cal').on('click','.close',function(){	
-		delete calData.events[this.parentNode.childNodes[5].id];
-		this.parentNode.remove();
+   		let calDelNode = this.parentNode;
+   		console.log(calDelNode);
+   		console.log(calDelNode.childNodes[5].id);
+		delete calData.months[createId(monthHeader)][calDelNode.childNodes[5].id];
+		calDelNode.remove();
 	});
 
 
@@ -592,5 +597,21 @@ $( document ).ready(function() {
    			$('#edit-modal').remove();
    		});
    	});
+
+   
+   	
+	$(document).mousedown(function(e){
+		if (e.shiftKey) {   		
+		 	let ds = new DragSelect({
+	   			selectables: document.getElementsByClassName('cell-data'),
+	   			area: document.getElementById('rink-cal'),
+	   			onElementSelect: function(element){
+	   				console.log('hi');
+   				}
+   			});	
+   		}
+   	});
+
+
 });
 

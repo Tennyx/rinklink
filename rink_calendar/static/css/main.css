@@ -127,6 +127,11 @@ th {
 	color: red;
 }
 
-
+.ds-selected {
+  outline: 3px solid black;
+  outline-offset: 3px;
+  color: black;
+  font-weight: bold;
+}
 
 
