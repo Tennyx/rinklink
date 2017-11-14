@@ -7,7 +7,7 @@ table {
 	margin-right: auto;
 }
 
-#month-header {
+#month-header, #event-header {
 	font-family: 'Russo One', sans-serif;
 	color: rgba(73,155,234,1);
 	margin: 40px 0px 25px 0px;
@@ -48,11 +48,12 @@ th {
 }
 
 #event-div {
-	height: 400px;
-	width: 400px;
-	margin-top: 50px;
-	margin-left: auto;
-	margin-right: auto;
+	margin: 40px 0px 0px 20px;
+	border: 1px solid #e0e0e0;
+	border-radius:4px;
+	background: #e0e0e0;
+	width: 152px;
+	height: 500px;
 }
 
 .form-price {

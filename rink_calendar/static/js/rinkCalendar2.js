@@ -166,7 +166,6 @@ function drop(ev, el) {
     }
     
 	sortByTime(event.target.id);
-	data.clearData()
 }
 
 //creates calendar
@@ -597,21 +596,5 @@ $( document ).ready(function() {
    			$('#edit-modal').remove();
    		});
    	});
-
-   
-   	
-	$(document).mousedown(function(e){
-		if (e.shiftKey) {   		
-		 	let ds = new DragSelect({
-	   			selectables: document.getElementsByClassName('cell-data'),
-	   			area: document.getElementById('rink-cal'),
-	   			onElementSelect: function(element){
-	   				console.log('hi');
-   				}
-   			});	
-   		}
-   	});
-
-
 });
 
