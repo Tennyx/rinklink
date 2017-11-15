@@ -13,7 +13,7 @@ let toggleSort = false;
 //creates HTML IDs, filters anything not alphanumeric
 
 function createId(data){
-	let acceptableChar = 'abcdefghijklmnopqrstuvwxyz0123456789';
+	let acceptableChar = '-abcdefghijklmnopqrstuvwxyz0123456789';
 	let newId = ''
 
 	for(i=0;i<data.length;i++){
@@ -118,7 +118,7 @@ function drop(ev, el) {
 
     	if(eventNodeCopy.id[0] === '_'){
     		nodeMetaData = jQuery.extend(true, {}, calData.events[eventNodeCopy.id]);		
-    		eventNodeCopy.id = createId(ev.target.id + eventNodeCopy.id);
+    		eventNodeCopy.id = createId(ev.target.id + '-' + eventNodeCopy.id);
     	}
     	else{
     		nodeMetaData = jQuery.extend(true, {}, calData.months[createId(monthHeader)][eventNodeCopy.id]);
@@ -127,7 +127,7 @@ function drop(ev, el) {
 
     	while(eventNodeCopy.id in calData.months[createId(monthHeader)]){
 			nodeMetaData.title += ' copy';
-			eventNodeCopy.id = createId(ev.target.id + nodeMetaData.title + nodeMetaData.startTime + nodeMetaData.endTime);
+			eventNodeCopy.id = createId(ev.target.id + '-' + nodeMetaData.title + nodeMetaData.startTime + nodeMetaData.endTime);
 			eventNodeCopy.innerHTML = createEventDisplay(nodeMetaData.title, nodeMetaData.startTime, nodeMetaData.endTime);
     	}
     	
@@ -204,7 +204,7 @@ function createCal(date){
 		let daysInWeek = [];
 		for(i=0;i<7;i++){
 			daysInWeek.push(
-				'<td class="cell-shell" ondrop="drop(event, this)" ondragover="allowDrop(event)" id=' + day + '>\
+				'<td class="cell-shell" ondrop="drop(event, this)" ondragover="allowDrop(event)" id="' + day + '">\
 					<div class="date-num">' + day +'</div>\
 				</td>'
 			);
@@ -318,7 +318,7 @@ $( document ).ready(function() {
 
 			$('#submit-changes').click(function(){
 	   			delete calData.months[createId(monthHeader)][calNode];
-	   			let calId = $('#' + calNode).parent().parent().attr("id") + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
+	   			let calId = $('#' + calNode).parent().parent().attr("id") + '-' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
 				let calTitle = $('#edit-event').val();
 				let calColor = $('#edit-main-color').css("background-color");
 	   			let calStart = $('#edit-time-start').val();
@@ -565,7 +565,7 @@ $( document ).ready(function() {
 
 		$('#submit-changes').click(function(){
    			delete calData.months[createId(monthHeader)][quickEditCal];
-   			let calId = $('#' + quickEditCal).parent().parent().attr("id") + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
+   			let calId = $('#' + quickEditCal).parent().parent().attr("id") + '-' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
 			let calTitle = $('#edit-event').val();
 			let calColor = $('#edit-main-color').css("background-color");
    			let calStart = $('#edit-time-start').val();

@@ -23,9 +23,14 @@ table {
 	font-size: 35px;
 }
 
-#event-header {
+#events-wrapper {
+	margin-top: 90px;
 	width:150px;
 	float:right;
+}
+
+#events-header {
+
 }
 
 .date-num {
@@ -65,12 +70,12 @@ th {
 }
 
 #event-div {
-	margin: 40px 0px 0px 20px;
+	margin: 0px 0px 0px 20px;
 	border: 1px solid #e0e0e0;
-	border-radius:4px;
-	background: #e0e0e0;
+	border-radius:4px;/*
+	background: #e0e0e0;*/
 	width: 152px;
-	height: 500px;
+	height: 800px;
 	float:right;
 }
 
@@ -82,6 +87,14 @@ th {
 	background-color: white;
 	border: none;
 	outline: none;
+	float:right;
+	margin-right: 4px;
+	padding: 0px 5px 0px 5px;
+	border-radius: 4px
+}
+
+#toggle-sort:hover {
+	color: gray;
 }
 
 .time-display {
@@ -152,15 +165,18 @@ th {
 	font-size: 25px;
 }
 
-.btn-cycle:hover {
+.btn-add {
+	color: rgba(73,155,234,1);
+	background: white;	
+	margin-bottom: 2px;
+	float: left;
+}
+
+.btn-cycle:hover, .btn-add:hover {
 	color:#f29326;
 }
 
-.btn-cycle:focus {
-	outline:none; 
-}
-
-.btn-cycle:active {
+.btn-cycle:active, .btn-add:active {
 	color: #e2edff;
 }
 
