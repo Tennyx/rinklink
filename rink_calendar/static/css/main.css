@@ -1,16 +1,31 @@
-body {
-		
-}
+/** {
+	border: 1px solid red;	
+}*/
 
 table {
 	margin-left: auto;
 	margin-right: auto;
 }
 
-#month-header, #event-header {
+#cal-top {
 	font-family: 'Russo One', sans-serif;
 	color: rgba(73,155,234,1);
-	margin: 40px 0px 25px 0px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom:10px;
+	max-width: 1050px;
+	height:60px;
+}
+
+#month-header {
+	margin: 5px 15px 0px 0px;
+	float:right;
+	font-size: 35px;
+}
+
+#event-header {
+	width:150px;
+	float:right;
 }
 
 .date-num {
@@ -44,7 +59,9 @@ th {
 }
 
 #cycle-holder {
-	margin-top: 50px
+	display: inline-block;
+	float: left;
+	margin: 3px 10px 0px 10px;
 }
 
 #event-div {
@@ -54,6 +71,7 @@ th {
 	background: #e0e0e0;
 	width: 152px;
 	height: 500px;
+	float:right;
 }
 
 .form-price {
@@ -128,11 +146,24 @@ th {
 	color: red;
 }
 
-.ds-selected {
-  outline: 3px solid black;
-  outline-offset: 3px;
-  color: black;
-  font-weight: bold;
+.btn-cycle {
+	color: rgba(73,155,234,1);
+	background: white;
+	font-size: 25px;
 }
 
+.btn-cycle:hover {
+	color:#f29326;
+}
 
+.btn-cycle:focus {
+	outline:none; 
+}
+
+.btn-cycle:active {
+	color: #e2edff;
+}
+
+.btn:focus,.btn:active {
+	-webkit-box-shadow: none;
+}

@@ -21,9 +21,10 @@
 	<div class="row">
 		<div class="col-lg-2">
 			<div id="events-wrapper">
-				<h3 id="event-header" class="text-center">Events</h3>
+				<div id="event-header" class="text-center">Events</div>
 				<div class="text-center mt-5">
-					<button id="create-event" class="btn btn-success" data-toggle="modal" data-target="#edit-modal"><i class="fa fa-plus" aria-hidden="true"></i></button>
+					<button id="create-event" class="btn btn-cycle" data-toggle="modal" data-target="#edit-modal"><i class="fa fa-plus" aria-hidden="true"></i> New Event</button>
+					<button class="btn btn-cycle"><i class="fa fa-plus" aria-hidden="true"></i> New Pickup</button>
 					<button id="toggle-sort" title="Toggle Sort"><i class="fa fa-list" aria-hidden="true"></i></button>
 				</div>
 
@@ -36,7 +37,17 @@
 
 		<div class="col-lg-10">
 			<div id="cal-wrapper">
-				<h2 class="text-center" id="month-header"></h2>
+				
+			<div id="cal-top">
+				<span id="cycle-holder">
+					<button id="back" class="btn btn-cycle"><i class="fa fa-caret-left" aria-hidden="true"></i></button>
+					<button id="current-month" class="btn btn-cycle"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></button>
+					<button id="fwd" class="btn btn-cycle"><i class="fa fa-caret-right" aria-hidden="true"></i></button>
+				</span>	
+
+				<span id="month-header"></span>
+			</div>
+
 				<table id="rink-cal">
 					<tr>
 						<th>SUN</th>
@@ -49,11 +60,7 @@
 					</tr>
 				</table>
 
-				<div id="cycle-holder" class="text-center">
-					<button id="back" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
-					<button id="current-month" class="btn btn-primary">CURRENT MONTH</button>
-					<button id="fwd" class="btn btn-primary"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
-				</div>	
+				
 			</div>
 		</div>
 	</div>	
