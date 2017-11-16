@@ -610,5 +610,27 @@ $( document ).ready(function() {
    			$('#edit-modal').remove();
    		});
    	});
+
+   	//save to database
+
+   	$('#btn-save').click(function(){
+   		event.preventDefault();
+		$.ajax({
+    		type : "POST",
+    		url : "/rink-calendar/api/",
+    		csrfmiddlewaretoken: "{{ csrf_token }}",
+    		data : JSON.stringify({"user_data":calData}),
+    		headers: {
+      			'Accept': 'application/json',
+      			'Content-Type': 'application/json'
+      		},
+    	success: function(){
+        	alert("Saved! It worked.");
+      	},
+    	error: function(XMLHttpRequest, textStatus, errorThrown) {
+      		alert("some error " + String(errorThrown) + String(textStatus) + String(XMLHttpRequest.responseText));
+      	}
+    	});
+   	});
 });
 

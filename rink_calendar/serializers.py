@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import MonthData
+from .models import UserData
 
-class MonthSerializer(serializers.ModelSerializer):
+class DataSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = MonthData
+		model = UserData
 		fields = '__all__'

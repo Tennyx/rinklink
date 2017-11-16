@@ -4,7 +4,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
 	url(r'^$', views.rink_calendar, name="rink_calendar"),
-	url(r'^api/$', views.api.as_view(), name="api")
+	url(r'^api/$', views.api, name="api")
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
