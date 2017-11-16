@@ -233,6 +233,20 @@ function createCal(date){
   	});
 
 	if(createId(monthHeader) in calData.months){
+		let savedData = calData.months[createId(monthHeader)];
+
+		for (let key in savedData) {
+    		if (savedData.hasOwnProperty(key)) {
+    			$('#' + key.split('-')[0]).append(
+    				'<div class="event-wrap">\
+						<span class="close" data-toggle="modal" data-target="#verify-modal">&times;</span>\
+						<span class="ed" data-toggle="modal" data-target="#edit-modal"><i class="fa fa-pencil" aria-hidden="true"></i></span>\
+						<div id="' + key + '"' + 'style="background-color:' + savedData[key].color + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(savedData[key].title, savedData[key].startTime, savedData[key].endTime) + '</div>\
+					</div>'
+    			);
+    			sortByTime(key.split('-')[0]);
+       		}
+		}
 		return
 	}
 	else{
