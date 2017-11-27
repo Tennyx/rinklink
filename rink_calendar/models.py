@@ -5,6 +5,3 @@ from django.db import models
 
 class UserData(models.Model):
 	user_data = JSONField()
-
-	# def __unicode__(self):
-	# 	return self.monthYear
