@@ -619,7 +619,7 @@ $( document ).ready(function() {
     		type : "POST",
     		url : "/rink-calendar/api/",
     		csrfmiddlewaretoken: "{{ csrf_token }}",
-    		data : JSON.stringify({"user_data":calData}),
+    		data : JSON.stringify({"user_id": "cale", "user_data":calData}),
     		headers: {
       			'Accept': 'application/json',
       			'Content-Type': 'application/json'

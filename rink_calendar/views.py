@@ -31,9 +31,26 @@ def api(request):
 		return Response(serializer.data)
 
 	elif request.method == 'POST':
-		serializer = DataSerializer(data=request.data)
-		# print serializer
-		if serializer.is_valid():
-			serializer.save()
-			return Response(serializer.data, status=status.HTTP_201_CREATED)
-		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+		
+
+		print request.data['user_id']
+
+		if UserData.objects.all().filter(user_id=request.data['user_id']):
+			serializer = DataSerializer(instance=UserData.objects.get(user_id=request.data['user_id']), data=request.data)
+			if serializer.is_valid():
+				serializer.save()
+				return Response(serializer.data, status=status.HTTP_201_CREATED)
+			else:
+				return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+		# print request.data['user_data']
+		# print request.data['user_name']
+		
+
+
+
+		else:
+			serializer = DataSerializer(data=request.data)
+			if serializer.is_valid():
+				serializer.save()
+				return Response(serializer.data, status=status.HTTP_201_CREATED)
+			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
