@@ -9,6 +9,13 @@ let calData = {
 			};
 const timeArr = [12,1,2,3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7,8,9,10,11];
 let toggleSort = false;
+let calUser = window.location.search.substring(1).substring(2);
+
+//load from DB
+
+$.getJSON( "/rink-calendar/api/?q=" + calUser, function( data ) {
+	calData = data.user_data		
+});	
 
 //creates HTML IDs, filters anything not alphanumeric
 
@@ -221,17 +228,6 @@ function createCal(date){
 	$('#rink-cal').append(weeks);
 	$('#month-header').html(monthHeader);
 
-	$.getJSON( "/rink-calendar/api/?format=json", function( data ) {
-  		for(let i=0; i <data.length;i++){
-  			if(data[i].monthYear == monthHeader){
-				for(let num=1;num<Object.keys(data[i]).length-2;num++){
-					let findKey = 'c' + num;
-					$('#' + num).append('<div class="cell-data" id="c' + num + '">' + data[i][findKey] + '</div>');
-				}
-  			}
-  		}
-  	});
-
 	if(createId(monthHeader) in calData.months){
 		let savedData = calData.months[createId(monthHeader)];
 
@@ -257,6 +253,18 @@ function createCal(date){
 //after document loads
 
 $( document ).ready(function() {
+
+	for (let key in calData.events){
+		if (calData.events.hasOwnProperty(key)) {
+			$('#event-div').append(
+				'<div class="event-wrap">\
+					<span class="close" data-toggle="modal" data-target="#verify-modal">&times;</span>\
+					<span class="ed" data-toggle="modal" data-target="#edit-modal"><i class="fa fa-pencil" aria-hidden="true"></i></span>\
+					<div id="' + key + '"' + 'style="background-color:' + calData.events[key].color + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(calData.events[key].title, calData.events[key].startTime, calData.events[key].endTime) + '</div>\
+				</div>'
+			);
+		}	
+	}
 
 	createCal();
 
@@ -619,7 +627,7 @@ $( document ).ready(function() {
     		type : "POST",
     		url : "/rink-calendar/api/",
     		csrfmiddlewaretoken: "{{ csrf_token }}",
-    		data : JSON.stringify({"user_id": "cale", "user_data":calData}),
+    		data : JSON.stringify({"user_id": calUser, "user_data":calData}),
     		headers: {
       			'Accept': 'application/json',
       			'Content-Type': 'application/json'

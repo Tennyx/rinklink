@@ -10,6 +10,7 @@ from .models import UserData
 
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.renderers import JSONRenderer
 
 def rink_calendar(request):
 	return render(request, 'rink_calendar/rink-calendar.html')
@@ -26,9 +27,17 @@ def api(request):
 	# 	# return Response(_)
 
 	if request.method == 'GET':
-		user_data = UserData.objects.all()
-		serializer = DataSerializer(user_data, many=True)
-		return Response(serializer.data)
+
+		q_param = request.GET.get('q', '')
+
+		if q_param:
+			return Response(DataSerializer(UserData.objects.get(user_id=q_param)).data)
+		else:	
+			user_data = UserData.objects.all()
+			serializer = DataSerializer(user_data, many=True)
+			# return JSONRenderer().render(serializer.data, renderer_context={'indent':4})
+			# return render(request, 'rink_calendar/api.html', context={'api_data':serializer.data})
+			return Response(serializer.data)
 
 	elif request.method == 'POST':
 		
