@@ -22,7 +22,7 @@ def api(request):
 
 	# def perform_create(self, serializer):
 	# 	user_data = self.request.data
-	# 	print user_data['user_data']
+	# 	print(user_data['user_data'])
 	# 	_ = serializer.save(user_data=user_data)
 	# 	# return Response(_)
 
@@ -42,7 +42,7 @@ def api(request):
 	elif request.method == 'POST':
 		
 
-		print request.data['user_id']
+		print(request.data['user_id'])
 
 		if UserData.objects.all().filter(user_id=request.data['user_id']):
 			serializer = DataSerializer(instance=UserData.objects.get(user_id=request.data['user_id']), data=request.data)
@@ -51,8 +51,8 @@ def api(request):
 				return Response(serializer.data, status=status.HTTP_201_CREATED)
 			else:
 				return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-		# print request.data['user_data']
-		# print request.data['user_name']
+		# print(request.data['user_data'])
+		# print(request.data['user_name'])
 		
 
 
