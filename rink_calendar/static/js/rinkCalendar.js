@@ -9,11 +9,18 @@ let calData = {
 			};
 const timeArr = [12,1,2,3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7,8,9,10,11];
 let toggleSort = false;
+let calUser = window.location.search.substring(1).substring(2);
+
+//load from DB
+
+$.getJSON( "/rink-calendar/api/?q=" + calUser, function( data ) {
+	calData = data.user_data		
+});	
 
 //creates HTML IDs, filters anything not alphanumeric
 
 function createId(data){
-	let acceptableChar = 'abcdefghijklmnopqrstuvwxyz0123456789';
+	let acceptableChar = '-abcdefghijklmnopqrstuvwxyz0123456789';
 	let newId = ''
 
 	for(i=0;i<data.length;i++){
@@ -60,11 +67,11 @@ function createEventDisplay(title, timeStart, timeEnd){
 //sorts events by time
 
 function sortByTime(parentId){
-		
 	let sortTimeArr = [];
 
-    $('#' + parentId).children('.cell-data').each(function(){
-    	let timeCheck = calData.months[createId(monthHeader)][this.id].startTime;
+    $('#' + parentId).children('.event-wrap').each(function(){
+    	console.log(this.childNodes[5].id)
+    	let timeCheck = calData.months[createId(monthHeader)][this.childNodes[5].id].startTime;
     	let sortHour = parseInt(timeCheck.split(':')[0]);
     	let sortMin = timeCheck.split(':')[1].substr(0,2);
     	let timeTotal = 0;
@@ -105,33 +112,35 @@ function drop(ev, el) {
     ev.preventDefault();
     let data = ev.dataTransfer.getData("text");
     let nodeMetaData = '';
-    let idCut = $('#' + data).parent().attr("id").length;
+    let wholeNode = document.getElementById(data).parentNode;
+    let idCut = wholeNode.parentNode.id.length;
     
     if($('#' + ev.target.id).hasClass('cell-data') || $('#' + ev.target.id).hasClass('date-num')){
     	return
     }
 
     if(document.getElementById(data).id[0] == '_' || ev.altKey){
-    	let nodeCopy = document.getElementById(data).cloneNode(true);
+    	let wholeNodeCopy = wholeNode.cloneNode(true);
+    	let eventNodeCopy = wholeNodeCopy.childNodes[5];
 
-    	if(nodeCopy.id[0] === '_'){
-    		nodeMetaData = jQuery.extend(true, {}, calData.events[nodeCopy.id]);		
-    		nodeCopy.id = createId(ev.target.id + nodeCopy.id);
+    	if(eventNodeCopy.id[0] === '_'){
+    		nodeMetaData = jQuery.extend(true, {}, calData.events[eventNodeCopy.id]);		
+    		eventNodeCopy.id = createId(ev.target.id + '-' + eventNodeCopy.id);
     	}
     	else{
-    		nodeMetaData = jQuery.extend(true, {}, calData.months[createId(monthHeader)][nodeCopy.id]);
-    		nodeCopy.id = createId(ev.target.id + nodeCopy.id.substr(idCut));
+    		nodeMetaData = jQuery.extend(true, {}, calData.months[createId(monthHeader)][eventNodeCopy.id]);
+    		eventNodeCopy.id = createId(ev.target.id + eventNodeCopy.id.substr(idCut));
     	}
 
-    	while(nodeCopy.id in calData.months[createId(monthHeader)]){
+    	while(eventNodeCopy.id in calData.months[createId(monthHeader)]){
 			nodeMetaData.title += ' copy';
-			nodeCopy.id = createId(ev.target.id + nodeMetaData.title + nodeMetaData.startTime + nodeMetaData.endTime);
-			nodeCopy.innerHTML = createEventDisplay(nodeMetaData.title, nodeMetaData.startTime, nodeMetaData.endTime);
+			eventNodeCopy.id = createId(ev.target.id + '-' + nodeMetaData.title + nodeMetaData.startTime + nodeMetaData.endTime);
+			eventNodeCopy.innerHTML = createEventDisplay(nodeMetaData.title, nodeMetaData.startTime, nodeMetaData.endTime);
     	}
     	
     	
-    	el.appendChild(nodeCopy);
-    	calData.months[createId(monthHeader)][nodeCopy.id] = {
+    	el.appendChild(wholeNodeCopy);
+    	calData.months[createId(monthHeader)][eventNodeCopy.id] = {
     		'title': nodeMetaData.title,
     		'startTime': nodeMetaData.startTime,
     		'endTime': nodeMetaData.endTime,
@@ -140,15 +149,21 @@ function drop(ev, el) {
     	};
     }
     else{
-    	let nodeInd = document.getElementById(data);
+    	let eventNodeInd = document.getElementById(data);
 
-    	nodeMetaData = calData.months[createId(monthHeader)][nodeInd.id];
+    	if(createId(ev.target.id + eventNodeInd.id.substr(idCut)) in calData.months[createId(monthHeader)]){
+    		alert('Event with same name and times already exists.');
+    		return
+    	}
     	
-    	delete calData.months[createId(monthHeader)][nodeInd.id];
-    	nodeInd.id = createId(ev.target.id + nodeInd.id.substr(idCut));
-    	el.appendChild(nodeInd);
+		nodeMetaData = calData.months[createId(monthHeader)][eventNodeInd.id];
+    	
+    	delete calData.months[createId(monthHeader)][eventNodeInd.id];
+    	eventNodeInd.id = createId(ev.target.id + eventNodeInd.id.substr(idCut));
+    	el.appendChild(wholeNode);
 
-    	calData.months[createId(monthHeader)][nodeInd.id] = {
+
+    	calData.months[createId(monthHeader)][eventNodeInd.id] = {
     		'title': nodeMetaData.title,
     		'startTime': nodeMetaData.startTime,
     		'endTime': nodeMetaData.endTime,
@@ -196,7 +211,7 @@ function createCal(date){
 		let daysInWeek = [];
 		for(i=0;i<7;i++){
 			daysInWeek.push(
-				'<td class="cell-shell" ondrop="drop(event, this)" ondragover="allowDrop(event)" id=' + day + '>\
+				'<td class="cell-shell" ondrop="drop(event, this)" ondragover="allowDrop(event)" id="' + day + '">\
 					<div class="date-num">' + day +'</div>\
 				</td>'
 			);
@@ -213,18 +228,21 @@ function createCal(date){
 	$('#rink-cal').append(weeks);
 	$('#month-header').html(monthHeader);
 
-	$.getJSON( "/rink-calendar/api/?format=json", function( data ) {
-  		for(let i=0; i <data.length;i++){
-  			if(data[i].monthYear == monthHeader){
-				for(let num=1;num<Object.keys(data[i]).length-2;num++){
-					let findKey = 'c' + num;
-					$('#' + num).append('<div class="cell-data" id="c' + num + '">' + data[i][findKey] + '</div>');
-				}
-  			}
-  		}
-  	});
-
 	if(createId(monthHeader) in calData.months){
+		let savedData = calData.months[createId(monthHeader)];
+
+		for (let key in savedData) {
+    		if (savedData.hasOwnProperty(key)) {
+    			$('#' + key.split('-')[0]).append(
+    				'<div class="event-wrap">\
+						<span class="close" data-toggle="modal" data-target="#verify-modal">&times;</span>\
+						<span class="ed" data-toggle="modal" data-target="#edit-modal"><i class="fa fa-pencil" aria-hidden="true"></i></span>\
+						<div id="' + key + '"' + 'style="background-color:' + savedData[key].color + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(savedData[key].title, savedData[key].startTime, savedData[key].endTime) + '</div>\
+					</div>'
+    			);
+    			sortByTime(key.split('-')[0]);
+       		}
+		}
 		return
 	}
 	else{
@@ -235,6 +253,18 @@ function createCal(date){
 //after document loads
 
 $( document ).ready(function() {
+
+	for (let key in calData.events){
+		if (calData.events.hasOwnProperty(key)) {
+			$('#event-div').append(
+				'<div class="event-wrap">\
+					<span class="close" data-toggle="modal" data-target="#verify-modal">&times;</span>\
+					<span class="ed" data-toggle="modal" data-target="#edit-modal"><i class="fa fa-pencil" aria-hidden="true"></i></span>\
+					<div id="' + key + '"' + 'style="background-color:' + calData.events[key].color + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(calData.events[key].title, calData.events[key].startTime, calData.events[key].endTime) + '</div>\
+				</div>'
+			);
+		}	
+	}
 
 	createCal();
 
@@ -269,6 +299,7 @@ $( document ).ready(function() {
    		monthVar = 0;	
    		monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
 		createCal(monthHeader);
+		console.log(calData);
    	});
 
    	$('#back').click(function(){
@@ -280,7 +311,6 @@ $( document ).ready(function() {
    	//calendar actions
 
    	$('#rink-cal').on('click','.cell-data',function(){
-   		console.log(calData);
    		let calNode = this.id;
 
    		$('#event-div').append(eventModal(
@@ -309,7 +339,7 @@ $( document ).ready(function() {
 
 			$('#submit-changes').click(function(){
 	   			delete calData.months[createId(monthHeader)][calNode];
-	   			let calId = $('#' + calNode).parent().attr("id") + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
+	   			let calId = $('#' + calNode).parent().parent().attr("id") + '-' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
 				let calTitle = $('#edit-event').val();
 				let calColor = $('#edit-main-color').css("background-color");
 	   			let calStart = $('#edit-time-start').val();
@@ -332,8 +362,8 @@ $( document ).ready(function() {
 	   			$('#' + calNode).replaceWith(
 					'<div id="' + calId + '"' + 'style="background-color:' + calColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(calTitle, calStart, calEnd) + '</div>'
 				);
-	
-				sortByTime($('#' + calId).parent().attr("id"));
+
+				sortByTime($('#' + calId).parent().parent().attr("id"));
 			});
    			
    			$('#edit-modal').on('hidden.bs.modal', function () {
@@ -346,7 +376,8 @@ $( document ).ready(function() {
 
 			$('#delete-event').click(function(){
    				delete calData.months[createId(monthHeader)][calNode];
-   				$('#' + calNode).remove();
+   				console.log($('#' + calNode).parent());
+   				$('#' + calNode).parent().remove();
    			});
 
    			$('#verify-modal').on('hidden.bs.modal', function () {
@@ -386,7 +417,11 @@ $( document ).ready(function() {
 	   			let eventColor = calData.events[eventId]['color'] = $('#edit-main-color').css("background-color");
 	   			console.log(calData);
 		   		$('#event-div').append(
-					'<div id="' + eventId + '"' + 'style="background-color:' + eventColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(eventTitle, eventStart, eventEnd) + '</div>'
+					'<div class="event-wrap">\
+						<span class="close" data-toggle="modal" data-target="#verify-modal">&times;</span>\
+						<span class="ed" data-toggle="modal" data-target="#edit-modal"><i class="fa fa-pencil" aria-hidden="true"></i></span>\
+						<div id="' + eventId + '"' + 'style="background-color:' + eventColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(eventTitle, eventStart, eventEnd) + '</div>\
+					</div>'
 				);
 		   	}
 		});
@@ -398,7 +433,7 @@ $( document ).ready(function() {
 
    	
    	$('#event-div').on('click','.cell-data',function(){
-   		
+   	
    		let currentNode = this.id;
    		
    		$('#event-div').append(eventModal(
@@ -451,7 +486,7 @@ $( document ).ready(function() {
 
 			$('#delete-event').click(function(){
    				delete calData.events[currentNode];
-   				$('#' + currentNode).remove();
+   				$('#' + currentNode).parent().remove();
    			});
 
    			$('#verify-modal').on('hidden.bs.modal', function () {
@@ -463,6 +498,146 @@ $( document ).ready(function() {
 		$('#event-modal').on('hidden.bs.modal', function () {
    			$('#event-modal').remove();
    		});
+   	});
+
+   	//edit and x event functions
+
+   	$('#event-div').on('click','.close',function(){
+   		let delNode = this.parentNode;
+
+   		$('#event-div').append(verifyModal);	
+
+		$('#delete-event').click(function(){
+			delete calData.events[delNode.childNodes[5].id];
+			delNode.remove();
+		});
+
+		$('#verify-modal').on('hidden.bs.modal', function () {
+   			$('#verify-modal').remove();
+   		});
+	});
+
+   	$('#rink-cal').on('click','.close',function(){	
+   		let calDelNode = this.parentNode;
+   		console.log(calDelNode);
+   		console.log(calDelNode.childNodes[5].id);
+		delete calData.months[createId(monthHeader)][calDelNode.childNodes[5].id];
+		calDelNode.remove();
+	});
+
+
+   	$('#event-div').on('click','.ed',function(){
+   		let quickEditNode = this.parentNode.childNodes[5].id;
+
+   		$('#event-div').append(editModal(
+   				calData.events[quickEditNode].title,
+   				calData.events[quickEditNode].desc,
+   				calData.events[quickEditNode].color,
+   				'Edit Event',
+   				'Submit Changes'
+   		));
+
+   		$("#edit-time-start option[value='" + calData.events[quickEditNode].startTime + "']").attr("selected","selected");
+   		$("#edit-time-end option[value='" + calData.events[quickEditNode].endTime + "']").attr("selected","selected");
+
+   		$('.dropdown-menu button').click(function(){
+			let editColorPick = $(this).css("background-color");
+			$('#edit-main-color').css('background', editColorPick);
+		});
+
+		$('#submit-changes').click(function(){
+	   		delete calData.events[quickEditNode];
+	   		let editId = '_' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
+	   		calData.events[editId] = {};
+			let editTitle = calData.events[editId]['title'] = $('#edit-event').val();
+			let editColor = calData.events[editId]['color'] = $('#edit-main-color').css("background-color");
+	   		let editStart = calData.events[editId]['startTime'] = $('#edit-time-start').val();
+	   		let editEnd = calData.events[editId]['endTime'] = $('#edit-time-end').val();
+	   		calData.events[editId]['desc'] = $('#edit-desc').val();
+	   			
+	   		$('#' + quickEditNode).replaceWith(
+				'<div id="' + editId + '"' + 'style="background-color:' + editColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(editTitle, editStart, editEnd) + '</div>'
+			);
+		});
+   			
+   		$('#edit-modal').on('hidden.bs.modal', function () {
+   			$('#edit-modal').remove();
+   		});
+   	});
+
+   	$('#rink-cal').on('click','.ed',function(){
+   		let quickEditCal = this.parentNode.childNodes[5].id;
+   		
+   		$('#event-div').append(editModal(
+   			calData.months[createId(monthHeader)][quickEditCal].title,
+   			calData.months[createId(monthHeader)][quickEditCal].desc,
+   			calData.months[createId(monthHeader)][quickEditCal].color,
+   			'Edit Event',
+   			'Submit Changes'
+   		));
+
+   		$("#edit-time-start option[value='" + calData.months[createId(monthHeader)][quickEditCal].startTime + "']").attr("selected","selected");
+   		$("#edit-time-end option[value='" + calData.months[createId(monthHeader)][quickEditCal].endTime + "']").attr("selected","selected");
+
+   		$('.dropdown-menu button').click(function(){
+			let calColorPick = $(this).css("background-color");
+			$('#edit-main-color').css('background', calColorPick);
+		});
+
+		$('#submit-changes').click(function(){
+   			delete calData.months[createId(monthHeader)][quickEditCal];
+   			let calId = $('#' + quickEditCal).parent().parent().attr("id") + '-' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
+			let calTitle = $('#edit-event').val();
+			let calColor = $('#edit-main-color').css("background-color");
+   			let calStart = $('#edit-time-start').val();
+   			let calEnd = $('#edit-time-end').val();
+   			let calDesc = $('#edit-desc').val();
+
+   			if(calId in calData.months[createId(monthHeader)]){
+   				alert('Event with same title, start & end date already exists for this date.');
+   				return;
+			}
+	   			
+   			calData.months[createId(monthHeader)][calId] = {
+	    		'title': calTitle,
+	    		'startTime': calStart,
+	    		'endTime': calEnd,
+	    		'desc': calDesc,
+	    		'color': calColor	
+	    	};
+	   			
+   			$('#' + quickEditCal).replaceWith(
+				'<div id="' + calId + '"' + 'style="background-color:' + calColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(calTitle, calStart, calEnd) + '</div>'
+			);
+
+			sortByTime($('#' + calId).parent().parent().attr("id"));
+		});
+   			
+   		$('#edit-modal').on('hidden.bs.modal', function () {
+   			$('#edit-modal').remove();
+   		});
+   	});
+
+   	//save to database
+
+   	$('#btn-save').click(function(){
+   		event.preventDefault();
+		$.ajax({
+    		type : "POST",
+    		url : "/rink-calendar/api/",
+    		csrfmiddlewaretoken: "{{ csrf_token }}",
+    		data : JSON.stringify({"user_id": calUser, "user_data":calData}),
+    		headers: {
+      			'Accept': 'application/json',
+      			'Content-Type': 'application/json'
+      		},
+    	success: function(){
+        	alert("Saved! It worked.");
+      	},
+    	error: function(XMLHttpRequest, textStatus, errorThrown) {
+      		alert("some error " + String(errorThrown) + String(textStatus) + String(XMLHttpRequest.responseText));
+      	}
+    	});
    	});
 });
 
