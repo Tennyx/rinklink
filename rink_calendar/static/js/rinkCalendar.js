@@ -5,7 +5,8 @@ let monthVar = 0;
 let monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
 let calData = {
 			months: {},
-			events: {}
+			events: {},
+			eventOrder: ''
 			};
 const timeArr = [12,1,2,3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7,8,9,10,11];
 let toggleSort = false;
@@ -254,17 +255,7 @@ function createCal(date){
 
 $( document ).ready(function() {
 
-	for (let key in calData.events){
-		if (calData.events.hasOwnProperty(key)) {
-			$('#event-div').append(
-				'<div class="event-wrap">\
-					<span class="close" data-toggle="modal" data-target="#verify-modal">&times;</span>\
-					<span class="ed" data-toggle="modal" data-target="#edit-modal"><i class="fa fa-pencil" aria-hidden="true"></i></span>\
-					<div id="' + key + '"' + 'style="background-color:' + calData.events[key].color + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(calData.events[key].title, calData.events[key].startTime, calData.events[key].endTime) + '</div>\
-				</div>'
-			);
-		}	
-	}
+	$('#event-div').append(calData.eventOrder);
 
 	createCal();
 
@@ -396,9 +387,32 @@ $( document ).ready(function() {
 
 		$('#event-div').append(editModal('','','#bfbdbd', 'New Event', 'Create Event'));
 
+
+		/////////////////
+
+
+		let enterFunction = function(){
+			if (event.keyCode == 13 && document.activeElement.tagName !== 'TEXTAREA') {
+				console.log(document.activeElement.tagName);
+   				$('#submit-changes').click();
+  			}
+		}
+
+		$('form').on('submit', function(event){
+    		event.preventDefault();
+		});
+
+		$("#edit-modal").keyup(enterFunction);
+
+
+
+
+		/////////////////////
+
 		$('.dropdown-menu button').click(function(){
 			let eventColorPick = $(this).css("background-color");
 			$('#edit-main-color').css('background', eventColorPick);
+			$("#edit-modal").focus(); //for enter key trigger
 		});
 
 	   	$('#submit-changes').click(function(){
@@ -621,6 +635,8 @@ $( document ).ready(function() {
    	//save to database
 
    	$('#btn-save').click(function(){
+   		calData.eventOrder = $('#event-div').html();
+
    		event.preventDefault();
 		$.ajax({
     		type : "POST",
