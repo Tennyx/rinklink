@@ -5,7 +5,9 @@ let monthVar = 0;
 let monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
 let calData = {
 			months: {},
-			events: {},
+			events: {
+				eventList: {}
+			},
 			eventOrder: ''
 			};
 const timeArr = [12,1,2,3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7,8,9,10,11];
@@ -126,7 +128,7 @@ function drop(ev, el) {
     	let eventNodeCopy = wholeNodeCopy.childNodes[5];
 
     	if(eventNodeCopy.id[0] === '_'){
-    		nodeMetaData = jQuery.extend(true, {}, calData.events[eventNodeCopy.id]);		
+    		nodeMetaData = jQuery.extend(true, {}, calData.events.eventList[eventNodeCopy.id]);		
     		eventNodeCopy.id = createId(ev.target.id + '-' + eventNodeCopy.id);
     	}
     	else{
@@ -299,6 +301,7 @@ $(document).ready(function() {
    	});
 
    	//calendar actions
+   	//POINT OF NO RETURN
 
    	$('#rink-cal').on('click','.cell-data',function(){
    		let calNode = this.id;
@@ -423,17 +426,17 @@ $(document).ready(function() {
 	   	$('#submit-changes').click(function(){
 	   		let eventId = '_' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
 
-	   		if(eventId in calData.events){
+	   		if(eventId in calData.events.eventList){
 	   			alert('Event with same title, start & end time already exists.');
 	   			return;
 	   		}
 	   		else{
-	   			calData.events[eventId] = {};
-	   			let eventTitle = calData.events[eventId]['title'] = $('#edit-event').val();
-	   			let eventStart = calData.events[eventId]['startTime'] = $('#edit-time-start').val();
-	   			let eventEnd = calData.events[eventId]['endTime'] = $('#edit-time-end').val()
-	   			let eventDesc = calData.events[eventId]['desc'] = $('#edit-desc').val();
-	   			let eventColor = calData.events[eventId]['color'] = $('#edit-main-color').css("background-color");
+	   			calData.events.eventList[eventId] = {};
+	   			let eventTitle = calData.events.eventList[eventId]['title'] = $('#edit-event').val();
+	   			let eventStart = calData.events.eventList[eventId]['startTime'] = $('#edit-time-start').val();
+	   			let eventEnd = calData.events.eventList[eventId]['endTime'] = $('#edit-time-end').val()
+	   			let eventDesc = calData.events.eventList[eventId]['desc'] = $('#edit-desc').val();
+	   			let eventColor = calData.events.eventList[eventId]['color'] = $('#edit-main-color').css("background-color");
 	   			console.log(calData);
 		   		$('#event-div').append(
 					'<div class="event-wrap">\
@@ -456,18 +459,18 @@ $(document).ready(function() {
    		let currentNode = this.id;
    		
    		$('#event-div').append(eventModal(
-			calData.events[currentNode].title,
-			calData.events[currentNode].startTime,
-			calData.events[currentNode].endTime,
-			calData.events[currentNode].desc
+			calData.events.eventList[currentNode].title,
+			calData.events.eventList[currentNode].startTime,
+			calData.events.eventList[currentNode].endTime,
+			calData.events.eventList[currentNode].desc
    		));
 	   
 
    		$('#edit-event').click(function(){
    			$('#event-div').append(editModal(
-   				calData.events[currentNode].title,
-   				calData.events[currentNode].desc,
-   				calData.events[currentNode].color,
+   				calData.events.eventList[currentNode].title,
+   				calData.events.eventList[currentNode].desc,
+   				calData.events.eventList[currentNode].color,
    				'Edit Event',
    				'Submit Changes'
    			));
@@ -485,8 +488,8 @@ $(document).ready(function() {
 
 			$("#edit-modal").keyup(enterFunction);
 
-   			$("#edit-time-start option[value='" + calData.events[currentNode].startTime + "']").attr("selected","selected");
-   			$("#edit-time-end option[value='" + calData.events[currentNode].endTime + "']").attr("selected","selected");
+   			$("#edit-time-start option[value='" + calData.events.eventList[currentNode].startTime + "']").attr("selected","selected");
+   			$("#edit-time-end option[value='" + calData.events.eventList[currentNode].endTime + "']").attr("selected","selected");
 
    			$('.dropdown-menu button').click(function(){
 				let editColorPick = $(this).css("background-color");
@@ -495,14 +498,14 @@ $(document).ready(function() {
 			});
 
 			$('#submit-changes').click(function(){
-	   			delete calData.events[currentNode];
+	   			delete calData.events.eventList[currentNode];
 	   			let editId = '_' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
-	   			calData.events[editId] = {};
-				let editTitle = calData.events[editId]['title'] = $('#edit-event').val();
-				let editColor = calData.events[editId]['color'] = $('#edit-main-color').css("background-color");
-	   			let editStart = calData.events[editId]['startTime'] = $('#edit-time-start').val();
-	   			let editEnd = calData.events[editId]['endTime'] = $('#edit-time-end').val();
-	   			calData.events[editId]['desc'] = $('#edit-desc').val();
+	   			calData.events.eventList[editId] = {};
+				let editTitle = calData.events.eventList[editId]['title'] = $('#edit-event').val();
+				let editColor = calData.events.eventList[editId]['color'] = $('#edit-main-color').css("background-color");
+	   			let editStart = calData.events.eventList[editId]['startTime'] = $('#edit-time-start').val();
+	   			let editEnd = calData.events.eventList[editId]['endTime'] = $('#edit-time-end').val();
+	   			calData.events.eventList[editId]['desc'] = $('#edit-desc').val();
 	   			
 	   			$('#' + currentNode).replaceWith(
 					'<div id="' + editId + '"' + 'style="background-color:' + editColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(editTitle, editStart, editEnd) + '</div>'
@@ -518,7 +521,7 @@ $(document).ready(function() {
    			$('#event-div').append(verifyModal);	
 
 			$('#delete-event').click(function(){
-   				delete calData.events[currentNode];
+   				delete calData.events.eventList[currentNode];
    				$('#' + currentNode).parent().remove();
    			});
 
@@ -541,7 +544,7 @@ $(document).ready(function() {
    		$('#event-div').append(verifyModal);	
 
 		$('#delete-event').click(function(){
-			delete calData.events[delNode.childNodes[5].id];
+			delete calData.events.eventList[delNode.childNodes[5].id];
 			delNode.remove();
 		});
 
@@ -563,9 +566,9 @@ $(document).ready(function() {
    		let quickEditNode = this.parentNode.childNodes[5].id;
 
    		$('#event-div').append(editModal(
-   				calData.events[quickEditNode].title,
-   				calData.events[quickEditNode].desc,
-   				calData.events[quickEditNode].color,
+   				calData.events.eventList[quickEditNode].title,
+   				calData.events.eventList[quickEditNode].desc,
+   				calData.events.eventList[quickEditNode].color,
    				'Edit Event',
    				'Submit Changes'
    		));
@@ -582,8 +585,8 @@ $(document).ready(function() {
 
 		$("#edit-modal").keyup(enterFunction);
 
-   		$("#edit-time-start option[value='" + calData.events[quickEditNode].startTime + "']").attr("selected","selected");
-   		$("#edit-time-end option[value='" + calData.events[quickEditNode].endTime + "']").attr("selected","selected");
+   		$("#edit-time-start option[value='" + calData.events.eventList[quickEditNode].startTime + "']").attr("selected","selected");
+   		$("#edit-time-end option[value='" + calData.events.eventList[quickEditNode].endTime + "']").attr("selected","selected");
 
    		$('.dropdown-menu button').click(function(){
 			let editColorPick = $(this).css("background-color");
@@ -592,14 +595,14 @@ $(document).ready(function() {
 		});
 
 		$('#submit-changes').click(function(){
-	   		delete calData.events[quickEditNode];
+	   		delete calData.events.eventList[quickEditNode];
 	   		let editId = '_' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
-	   		calData.events[editId] = {};
-			let editTitle = calData.events[editId]['title'] = $('#edit-event').val();
-			let editColor = calData.events[editId]['color'] = $('#edit-main-color').css("background-color");
-	   		let editStart = calData.events[editId]['startTime'] = $('#edit-time-start').val();
-	   		let editEnd = calData.events[editId]['endTime'] = $('#edit-time-end').val();
-	   		calData.events[editId]['desc'] = $('#edit-desc').val();
+	   		calData.events.eventList[editId] = {};
+			let editTitle = calData.events.eventList[editId]['title'] = $('#edit-event').val();
+			let editColor = calData.events.eventList[editId]['color'] = $('#edit-main-color').css("background-color");
+	   		let editStart = calData.events.eventList[editId]['startTime'] = $('#edit-time-start').val();
+	   		let editEnd = calData.events.eventList[editId]['endTime'] = $('#edit-time-end').val();
+	   		calData.events.eventList[editId]['desc'] = $('#edit-desc').val();
 	   			
 	   		$('#' + quickEditNode).replaceWith(
 				'<div id="' + editId + '"' + 'style="background-color:' + editColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(editTitle, editStart, editEnd) + '</div>'
