@@ -1,22 +1,14 @@
 function editEvent(eventNode, obj1, obj2){
-	$('#edit-event').click(function(){
-
-		let calNode = eventNode;
 
 		$('#event-div').append(editModal(
-			calData[obj1][obj2][calNode].title,
-			calData[obj1][obj2][calNode].desc,
-			calData[obj1][obj2][calNode].color,
+			calData[obj1][obj2][eventNode].title,
+			calData[obj1][obj2][eventNode].desc,
+			calData[obj1][obj2][eventNode].color,
 			'Edit Event',
 			'Submit Changes'
 		));
 
-		let enterFunction = function(){
-			if (event.keyCode == 13 && document.activeElement.tagName !== 'TEXTAREA') {
-				console.log(document.activeElement.tagName);
-				$('#submit-changes').click();
-			}
-		}
+
 
 		$('form').on('submit', function(event){
 			event.preventDefault();
@@ -24,8 +16,8 @@ function editEvent(eventNode, obj1, obj2){
 
 		$("#edit-modal").keyup(enterFunction);
 
-		$("#edit-time-start option[value='" + calData[obj1][obj2][calNode].startTime + "']").attr("selected","selected");
-		$("#edit-time-end option[value='" + calData[obj1][obj2][calNode].endTime + "']").attr("selected","selected");
+		$("#edit-time-start option[value='" + calData[obj1][obj2][eventNode].startTime + "']").attr("selected","selected");
+		$("#edit-time-end option[value='" + calData[obj1][obj2][eventNode].endTime + "']").attr("selected","selected");
 
 		$('.dropdown-menu button').click(function(){
 			let calColorPick = $(this).css("background-color");
@@ -34,8 +26,8 @@ function editEvent(eventNode, obj1, obj2){
 		});
 
 		$('#submit-changes').click(function(){
-			delete calData[obj1][obj2][calNode];
-			let calId = $('#' + calNode).parent().parent().attr("id") + '-' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
+			delete calData[obj1][obj2][eventNode];
+			let calId = $('#' + eventNode).parent().parent().attr("id") + '-' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
 			let calTitle = $('#edit-event').val();
 			let calColor = $('#edit-main-color').css("background-color");
 			let calStart = $('#edit-time-start').val();
@@ -55,7 +47,7 @@ function editEvent(eventNode, obj1, obj2){
 				'color': calColor	
 			};
 			
-			$('#' + calNode).replaceWith(
+			$('#' + eventNode).replaceWith(
 				'<div id="' + calId + '"' + 'style="background-color:' + calColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(calTitle, calStart, calEnd) + '</div>'
 			);
 
@@ -65,23 +57,4 @@ function editEvent(eventNode, obj1, obj2){
 		$('#edit-modal').on('hidden.bs.modal', function () {
 			$('#edit-modal').remove();
 		});
-	});
-
-	$('#verify-btn').click(function(){
-		$('#event-div').append(verifyModal);	
-
-		$('#delete-event').click(function(){
-			delete calData[obj1][obj2][calNode];
-			console.log($('#' + calNode).parent());
-			$('#' + calNode).parent().remove();
-		});
-
-		$('#verify-modal').on('hidden.bs.modal', function () {
-			$('#verify-modal').remove();
-		});
-	});
-
-	$('#event-modal').on('hidden.bs.modal', function () {
-		$('#event-modal').remove();
-	});
 }
