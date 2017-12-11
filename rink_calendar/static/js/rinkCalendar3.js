@@ -1,70 +1,3 @@
-let enterFunction = function(){
-	if (event.keyCode == 13 && document.activeElement.tagName !== 'TEXTAREA') {
-		$('#submit-changes').click();
-	}
-}
-
-function editEvent(eventNode, obj1, obj2){
-
-		$('#event-div').append(editModal(
-			calData[obj1][obj2][eventNode].title,
-			calData[obj1][obj2][eventNode].desc,
-			calData[obj1][obj2][eventNode].color,
-			'Edit Event',
-			'Submit Changes'
-		));
-
-
-
-		$('form').on('submit', function(event){
-			event.preventDefault();
-		});
-
-		$("#edit-modal").keyup(enterFunction);
-
-		$("#edit-time-start option[value='" + calData[obj1][obj2][eventNode].startTime + "']").attr("selected","selected");
-		$("#edit-time-end option[value='" + calData[obj1][obj2][eventNode].endTime + "']").attr("selected","selected");
-
-		$('.dropdown-menu button').click(function(){
-			let calColorPick = $(this).css("background-color");
-			$('#edit-main-color').css('background', calColorPick);
-			$("#edit-modal").focus(); //for enter key trigger
-		});
-
-		$('#submit-changes').click(function(){
-			delete calData[obj1][obj2][eventNode];
-			let calId = $('#' + eventNode).parent().parent().attr("id") + '-' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
-			let calTitle = $('#edit-event').val();
-			let calColor = $('#edit-main-color').css("background-color");
-			let calStart = $('#edit-time-start').val();
-			let calEnd = $('#edit-time-end').val();
-			let calDesc = $('#edit-desc').val();
-
-			if(calId in calData[obj1][obj2]){
-				alert('Event with same title, start & end date already exists for this date.');
-				return;
-			}
-			
-			calData[obj1][obj2][calId] = {
-				'title': calTitle,
-				'startTime': calStart,
-				'endTime': calEnd,
-				'desc': calDesc,
-				'color': calColor	
-			};
-			
-			$('#' + eventNode).replaceWith(
-				'<div id="' + calId + '"' + 'style="background-color:' + calColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(calTitle, calStart, calEnd) + '</div>'
-			);
-		
-			sortByTime($('#' + calId).parent().parent().attr("id"));
-		});
-		
-		$('#edit-modal').on('hidden.bs.modal', function () {
-			$('#edit-modal').remove();
-		});
-}
-
 //globals
 
 let monthVar = 0;
@@ -79,6 +12,151 @@ let calData = {
 const timeArr = [12,1,2,3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7,8,9,10,11];
 let toggleSort = false;
 let calUser = window.location.search.substring(1).substring(2);
+
+//keyboard functions
+
+let enterFunction = function(){
+	if (event.keyCode == 13 && document.activeElement.tagName !== 'TEXTAREA') {
+		$('#submit-changes').click();
+	}
+}
+
+//modal functions
+
+function createNewEvent(){
+	$('#event-div').append(editModal('','','#bfbdbd', 'New Event', 'Create Event'));
+
+	$('form').on('submit', function(event){
+		event.preventDefault();
+	});
+
+	$("#edit-modal").keyup(enterFunction);
+
+
+	$('.dropdown-menu button').click(function(){
+		let eventColorPick = $(this).css("background-color");
+		$('#edit-main-color').css('background', eventColorPick);
+		$("#edit-modal").focus(); //for enter key trigger
+	});
+
+	$('#submit-changes').click(function(){
+		let eventId = '_' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
+
+		if(eventId in calData.events.eventList){
+			alert('Event with same title, start & end time already exists.');
+			return;
+		}
+		else{
+			calData.events.eventList[eventId] = {};
+			let eventTitle = calData.events.eventList[eventId]['title'] = $('#edit-event').val();
+			let eventStart = calData.events.eventList[eventId]['startTime'] = $('#edit-time-start').val();
+			let eventEnd = calData.events.eventList[eventId]['endTime'] = $('#edit-time-end').val()
+			let eventDesc = calData.events.eventList[eventId]['desc'] = $('#edit-desc').val();
+			let eventColor = calData.events.eventList[eventId]['color'] = $('#edit-main-color').css("background-color");
+   
+			$('#event-div').append(
+				'<div class="event-wrap">\
+					<span class="close" data-toggle="modal" data-target="#verify-modal">&times;</span>\
+					<span class="ed" data-toggle="modal" data-target="#edit-modal"><i class="fa fa-pencil" aria-hidden="true"></i></span>\
+					<div id="' + eventId + '"' + 'style="background-color:' + eventColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(eventTitle, eventStart, eventEnd) + '</div>\
+				</div>'
+			);
+		}
+	});
+
+	$('#edit-modal').on('hidden.bs.modal', function () {
+		$('#edit-modal').remove();
+	});
+}
+
+function editEvent(eventNode, obj1, obj2){
+
+	$('#event-div').append(editModal(
+		calData[obj1][obj2][eventNode].title,
+		calData[obj1][obj2][eventNode].desc,
+		calData[obj1][obj2][eventNode].color,
+		'Edit Event',
+		'Submit Changes'
+	));
+
+
+
+	$('form').on('submit', function(event){
+		event.preventDefault();
+	});
+
+	$("#edit-modal").keyup(enterFunction);
+
+	$("#edit-time-start option[value='" + calData[obj1][obj2][eventNode].startTime + "']").attr("selected","selected");
+	$("#edit-time-end option[value='" + calData[obj1][obj2][eventNode].endTime + "']").attr("selected","selected");
+
+	$('.dropdown-menu button').click(function(){
+		let calColorPick = $(this).css("background-color");
+		$('#edit-main-color').css('background', calColorPick);
+		$("#edit-modal").focus(); //for enter key trigger
+	});
+
+	$('#submit-changes').click(function(){
+		let calId = '';
+
+		delete calData[obj1][obj2][eventNode];
+		if(obj1 == 'months'){
+			calId = $('#' + eventNode).parent().parent().attr("id") + '-' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
+		}
+		else{
+			calId = '_' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
+		}	
+		let calTitle = $('#edit-event').val();
+		let calColor = $('#edit-main-color').css("background-color");
+		let calStart = $('#edit-time-start').val();
+		let calEnd = $('#edit-time-end').val();
+		let calDesc = $('#edit-desc').val();
+
+		if(calId in calData[obj1][obj2]){
+			alert('Event with same title, start & end date already exists for this date.');
+			return;
+		}
+		
+		calData[obj1][obj2][calId] = {
+			'title': calTitle,
+			'startTime': calStart,
+			'endTime': calEnd,
+			'desc': calDesc,
+			'color': calColor	
+		};
+		
+		$('#' + eventNode).replaceWith(
+			'<div id="' + calId + '"' + 'style="background-color:' + calColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(calTitle, calStart, calEnd) + '</div>'
+		);
+		
+		if(obj1 === 'months'){
+			sortByTime($('#' + calId).parent().parent().attr("id"));
+		}
+	});
+	
+	$('#edit-modal').on('hidden.bs.modal', function () {
+		$('#edit-modal').remove();
+	});
+}
+
+function verify(eventNode, obj1, obj2){
+	$('#event-div').append(verifyModal);	
+
+	$('#delete-event').click(function(){
+		if(eventNode.childNodes[1].className == 'close'){
+			delete calData[obj1][obj2][eventNode.childNodes[5].id];
+			eventNode.remove();
+		}
+		else{ 
+			delete calData[obj1][obj2][eventNode];
+			$('#' + eventNode).parent().remove();
+		}
+	});
+
+	$('#verify-modal').on('hidden.bs.modal', function () {
+		$('#verify-modal').remove();
+	});
+}
 
 //load from DB
 
@@ -139,9 +217,6 @@ function sortByTime(parentId){
 	let sortTimeArr = [];
 
     $('#' + parentId).children('.event-wrap').each(function(){
-    	console.log(calData.months);
-    	console.log(createId(monthHeader));
-    	console.log(this.childNodes[5].id);
     	let timeCheck = calData.months[createId(monthHeader)][this.childNodes[5].id].startTime;
     	let sortHour = parseInt(timeCheck.split(':')[0]);
     	let sortMin = timeCheck.split(':')[1].substr(0,2);
@@ -302,7 +377,7 @@ function createCal(date){
     		if (savedData.hasOwnProperty(key)) {
     			$('#' + key.split('-')[0]).append(
     				'<div class="event-wrap">\
-						<span class="close" data-toggle="modal" data-target="#verify-modal">&times;</span>\
+						<span class="close">&times;</span>\
 						<span class="ed" data-toggle="modal" data-target="#edit-modal"><i class="fa fa-pencil" aria-hidden="true"></i></span>\
 						<div id="' + key + '"' + 'style="background-color:' + savedData[key].color + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(savedData[key].title, savedData[key].startTime, savedData[key].endTime) + '</div>\
 					</div>'
@@ -369,7 +444,6 @@ $(document).ready(function() {
    	});
 
    	//calendar actions
-   	//POINT OF NO RETURN
 
    	$('#rink-cal').on('click','.cell-data',function(){
 
@@ -387,16 +461,7 @@ $(document).ready(function() {
    		});
 
    		$('#verify-btn').click(function(){
-   			$('#event-div').append(verifyModal);	
-
-			$('#delete-event').click(function(){
-   				delete calData.months[createId(monthHeader)][calNode];
-   				$('#' + calNode).parent().remove();
-   			});
-
-   			$('#verify-modal').on('hidden.bs.modal', function () {
-   				$('#verify-modal').remove();
-   			});
+   			verify(calNode, 'months', createId(monthHeader));
    		});
 
    		$('#event-modal').on('hidden.bs.modal', function () {
@@ -408,56 +473,7 @@ $(document).ready(function() {
 
    	$('#create-event').click(function(){
 
-		$('#event-div').append(editModal('','','#bfbdbd', 'New Event', 'Create Event'));
-
-		let enterFunction = function(){
-			if (event.keyCode == 13 && document.activeElement.tagName !== 'TEXTAREA') {
-				
-   				$('#submit-changes').click();
-  			}
-		}
-
-		$('form').on('submit', function(event){
-    		event.preventDefault();
-		});
-
-		$("#edit-modal").keyup(enterFunction);
-
-
-		$('.dropdown-menu button').click(function(){
-			let eventColorPick = $(this).css("background-color");
-			$('#edit-main-color').css('background', eventColorPick);
-			$("#edit-modal").focus(); //for enter key trigger
-		});
-
-	   	$('#submit-changes').click(function(){
-	   		let eventId = '_' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
-
-	   		if(eventId in calData.events.eventList){
-	   			alert('Event with same title, start & end time already exists.');
-	   			return;
-	   		}
-	   		else{
-	   			calData.events.eventList[eventId] = {};
-	   			let eventTitle = calData.events.eventList[eventId]['title'] = $('#edit-event').val();
-	   			let eventStart = calData.events.eventList[eventId]['startTime'] = $('#edit-time-start').val();
-	   			let eventEnd = calData.events.eventList[eventId]['endTime'] = $('#edit-time-end').val()
-	   			let eventDesc = calData.events.eventList[eventId]['desc'] = $('#edit-desc').val();
-	   			let eventColor = calData.events.eventList[eventId]['color'] = $('#edit-main-color').css("background-color");
-	   			console.log(calData);
-		   		$('#event-div').append(
-					'<div class="event-wrap">\
-						<span class="close" data-toggle="modal" data-target="#verify-modal">&times;</span>\
-						<span class="ed" data-toggle="modal" data-target="#edit-modal"><i class="fa fa-pencil" aria-hidden="true"></i></span>\
-						<div id="' + eventId + '"' + 'style="background-color:' + eventColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(eventTitle, eventStart, eventEnd) + '</div>\
-					</div>'
-				);
-		   	}
-		});
-
-		$('#edit-modal').on('hidden.bs.modal', function () {
-	    	$('#edit-modal').remove();
-		});
+   		createNewEvent();
 	});
 
    	
@@ -472,72 +488,14 @@ $(document).ready(function() {
 			calData.events.eventList[currentNode].desc
    		));
 	   
-
-   		$('#edit-event').click(function(){
-   			$('#event-div').append(editModal(
-   				calData.events.eventList[currentNode].title,
-   				calData.events.eventList[currentNode].desc,
-   				calData.events.eventList[currentNode].color,
-   				'Edit Event',
-   				'Submit Changes'
-   			));
-
-   			let enterFunction = function(){
-				if (event.keyCode == 13 && document.activeElement.tagName !== 'TEXTAREA') {
-					console.log(document.activeElement.tagName);
-	   				$('#submit-changes').click();
-	  			}
-			}
-
-			$('form').on('submit', function(event){
-    			event.preventDefault();
-			});
-
-			$("#edit-modal").keyup(enterFunction);
-
-   			$("#edit-time-start option[value='" + calData.events.eventList[currentNode].startTime + "']").attr("selected","selected");
-   			$("#edit-time-end option[value='" + calData.events.eventList[currentNode].endTime + "']").attr("selected","selected");
-
-   			$('.dropdown-menu button').click(function(){
-				let editColorPick = $(this).css("background-color");
-				$('#edit-main-color').css('background', editColorPick);
-				$("#edit-modal").focus();
-			});
-
-			$('#submit-changes').click(function(){
-	   			delete calData.events.eventList[currentNode];
-	   			let editId = '_' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
-	   			calData.events.eventList[editId] = {};
-				let editTitle = calData.events.eventList[editId]['title'] = $('#edit-event').val();
-				let editColor = calData.events.eventList[editId]['color'] = $('#edit-main-color').css("background-color");
-	   			let editStart = calData.events.eventList[editId]['startTime'] = $('#edit-time-start').val();
-	   			let editEnd = calData.events.eventList[editId]['endTime'] = $('#edit-time-end').val();
-	   			calData.events.eventList[editId]['desc'] = $('#edit-desc').val();
-	   			
-	   			$('#' + currentNode).replaceWith(
-					'<div id="' + editId + '"' + 'style="background-color:' + editColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(editTitle, editStart, editEnd) + '</div>'
-				);
-			});
-   			
-   			$('#edit-modal').on('hidden.bs.modal', function () {
-   				$('#edit-modal').remove();
-   			});
+		$('#edit-event').click(function(){
+			editEvent(currentNode, 'events', 'eventList');
    		});
 
    		$('#verify-btn').click(function(){
-   			$('#event-div').append(verifyModal);	
-
-			$('#delete-event').click(function(){
-   				delete calData.events.eventList[currentNode];
-   				$('#' + currentNode).parent().remove();
-   			});
-
-   			$('#verify-modal').on('hidden.bs.modal', function () {
-   				$('#verify-modal').remove();
-   			});
+   			verify(currentNode, 'events', 'eventList');
    		});
 
-		
 		$('#event-modal').on('hidden.bs.modal', function () {
    			$('#event-modal').remove();
    		});
@@ -547,23 +505,11 @@ $(document).ready(function() {
 
    	$('#event-div').on('click','.close',function(){
    		let delNode = this.parentNode;
-
-   		$('#event-div').append(verifyModal);	
-
-		$('#delete-event').click(function(){
-			delete calData.events.eventList[delNode.childNodes[5].id];
-			delNode.remove();
-		});
-
-		$('#verify-modal').on('hidden.bs.modal', function () {
-   			$('#verify-modal').remove();
-   		});
+		verify(delNode, 'events', 'eventList');
 	});
 
    	$('#rink-cal').on('click','.close',function(){	
    		let calDelNode = this.parentNode;
-   		console.log(calDelNode);
-   		console.log(calDelNode.childNodes[5].id);
 		delete calData.months[createId(monthHeader)][calDelNode.childNodes[5].id];
 		calDelNode.remove();
 	});
@@ -571,120 +517,12 @@ $(document).ready(function() {
 
    	$('#event-div').on('click','.ed',function(){
    		let quickEditNode = this.parentNode.childNodes[5].id;
-
-   		$('#event-div').append(editModal(
-   				calData.events.eventList[quickEditNode].title,
-   				calData.events.eventList[quickEditNode].desc,
-   				calData.events.eventList[quickEditNode].color,
-   				'Edit Event',
-   				'Submit Changes'
-   		));
-
-   		let enterFunction = function(){
-			if (event.keyCode == 13 && document.activeElement.tagName !== 'TEXTAREA') {
-	   			$('#submit-changes').click();
-	  		}
-		}
-
-		$('form').on('submit', function(event){
-			event.preventDefault();
-		});
-
-		$("#edit-modal").keyup(enterFunction);
-
-   		$("#edit-time-start option[value='" + calData.events.eventList[quickEditNode].startTime + "']").attr("selected","selected");
-   		$("#edit-time-end option[value='" + calData.events.eventList[quickEditNode].endTime + "']").attr("selected","selected");
-
-   		$('.dropdown-menu button').click(function(){
-			let editColorPick = $(this).css("background-color");
-			$('#edit-main-color').css('background', editColorPick);
-			$("#edit-modal").focus();
-		});
-
-		$('#submit-changes').click(function(){
-	   		delete calData.events.eventList[quickEditNode];
-	   		let editId = '_' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
-	   		calData.events.eventList[editId] = {};
-			let editTitle = calData.events.eventList[editId]['title'] = $('#edit-event').val();
-			let editColor = calData.events.eventList[editId]['color'] = $('#edit-main-color').css("background-color");
-	   		let editStart = calData.events.eventList[editId]['startTime'] = $('#edit-time-start').val();
-	   		let editEnd = calData.events.eventList[editId]['endTime'] = $('#edit-time-end').val();
-	   		calData.events.eventList[editId]['desc'] = $('#edit-desc').val();
-	   			
-	   		$('#' + quickEditNode).replaceWith(
-				'<div id="' + editId + '"' + 'style="background-color:' + editColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(editTitle, editStart, editEnd) + '</div>'
-			);
-		});
-   			
-   		$('#edit-modal').on('hidden.bs.modal', function () {
-   			$('#edit-modal').remove();
-   		});
+		editEvent(quickEditNode, 'events', 'eventList');
    	});
 
    	$('#rink-cal').on('click','.ed',function(){
    		let quickEditCal = this.parentNode.childNodes[5].id;
-   		
-   		$('#event-div').append(editModal(
-   			calData.months[createId(monthHeader)][quickEditCal].title,
-   			calData.months[createId(monthHeader)][quickEditCal].desc,
-   			calData.months[createId(monthHeader)][quickEditCal].color,
-   			'Edit Event',
-   			'Submit Changes'
-   		));
-
-   		let enterFunction = function(){
-			if (event.keyCode == 13 && document.activeElement.tagName !== 'TEXTAREA') {
-	   			$('#submit-changes').click();
-	  		}
-		}
-
-		$('form').on('submit', function(event){
-			event.preventDefault();
-		});
-
-		$("#edit-modal").keyup(enterFunction);
-
-   		$("#edit-time-start option[value='" + calData.months[createId(monthHeader)][quickEditCal].startTime + "']").attr("selected","selected");
-   		$("#edit-time-end option[value='" + calData.months[createId(monthHeader)][quickEditCal].endTime + "']").attr("selected","selected");
-
-   		$('.dropdown-menu button').click(function(){
-			let calColorPick = $(this).css("background-color");
-			$('#edit-main-color').css('background', calColorPick);
-			$("#edit-modal").focus();
-		});
-
-		$('#submit-changes').click(function(){
-   			delete calData.months[createId(monthHeader)][quickEditCal];
-   			let calId = $('#' + quickEditCal).parent().parent().attr("id") + '-' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
-			let calTitle = $('#edit-event').val();
-			let calColor = $('#edit-main-color').css("background-color");
-   			let calStart = $('#edit-time-start').val();
-   			let calEnd = $('#edit-time-end').val();
-   			let calDesc = $('#edit-desc').val();
-
-   			if(calId in calData.months[createId(monthHeader)]){
-   				alert('Event with same title, start & end date already exists for this date.');
-   				return;
-			}
-	   			
-   			calData.months[createId(monthHeader)][calId] = {
-	    		'title': calTitle,
-	    		'startTime': calStart,
-	    		'endTime': calEnd,
-	    		'desc': calDesc,
-	    		'color': calColor	
-	    	};
-	   			
-   			$('#' + quickEditCal).replaceWith(
-				'<div id="' + calId + '"' + 'style="background-color:' + calColor + '" class="cell-data" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#event-modal">' + createEventDisplay(calTitle, calStart, calEnd) + '</div>'
-			);
-
-			sortByTime($('#' + calId).parent().parent().attr("id"));
-		});
-   			
-   		$('#edit-modal').on('hidden.bs.modal', function () {
-   			$('#edit-modal').remove();
-   		});
+   		editEvent(quickEditCal, 'months', createId(monthHeader));
    	});
 
    	//save to database
