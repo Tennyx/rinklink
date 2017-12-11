@@ -472,8 +472,7 @@ $(document).ready(function() {
    	//event list options
 
    	$('#create-event').click(function(){
-
-   		createNewEvent();
+		createNewEvent();
 	});
 
    	
@@ -541,7 +540,12 @@ $(document).ready(function() {
       			'Content-Type': 'application/json'
       		},
     	success: function(){
-        	alert("Saved! It worked.");
+        	// alert("Saved! It worked.");
+        	$('#event-div').append(successModal());
+        	$('#success-modal').modal('show');
+        	$('#success-modal').on('hidden.bs.modal', function () {
+   				$('#success-modal').remove();
+   			});
       	},
     	error: function(XMLHttpRequest, textStatus, errorThrown) {
       		alert("some error " + String(errorThrown) + String(textStatus) + String(XMLHttpRequest.responseText));

@@ -116,8 +116,21 @@ function editModal(edTitle, edDesc, edColor, modTitle, btnText){
 	return editStr;
 }
 
+function successModal(){
+	const successStr = 
+		'<div class="modal fade" id="success-modal">\
+			  	<div class="modal-dialog" role="document">\
+			    	<div class="modal-content">\
+			      		<div class="modal-body">\
+			       			 <h6 class="text-center">Changes Saved!</h6>\
+			       			 <div class="text-center"><i class="fa fa-check-square" aria-hidden="true"></i></div>\
+			      		</div>\
+			    	</div>\
+			  	</div>\
+		</div>';
 
-
+	return successStr;
+}
 
 
 

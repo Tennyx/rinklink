@@ -182,3 +182,12 @@ th {
 .btn:focus,.btn:active {
 	-webkit-box-shadow: none;
 }
+
+.fa-check-square {
+	color: green;
+	font-size: 70px;
+}
+
+#success-modal .modal-dialog {
+	width: 350px;
+}
