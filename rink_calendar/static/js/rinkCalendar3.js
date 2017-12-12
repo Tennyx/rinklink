@@ -9,7 +9,6 @@ let calData = {
 			},
 			eventOrder: ''
 			};
-const timeArr = [12,1,2,3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7,8,9,10,11];
 let toggleSort = false;
 let calUser = window.location.search.substring(1).substring(2);
 
@@ -32,7 +31,6 @@ function createNewEvent(){
 
 	$("#edit-modal").keyup(enterFunction);
 
-
 	$('.dropdown-menu button').click(function(){
 		let eventColorPick = $(this).css("background-color");
 		$('#edit-main-color').css('background', eventColorPick);
@@ -43,7 +41,8 @@ function createNewEvent(){
 		let eventId = '_' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
 
 		if(eventId in calData.events.eventList){
-			alert('Event with same title, start & end time already exists.');
+			$('#error-tag').html('Event with same title, start & end date already exists.');
+			$('#error-tag').addClass('alert alert-danger');
 			return;
 		}
 		else{
@@ -62,6 +61,8 @@ function createNewEvent(){
 				</div>'
 			);
 		}
+
+		$('#edit-modal').modal('hide');
 	});
 
 	$('#edit-modal').on('hidden.bs.modal', function () {
@@ -99,7 +100,6 @@ function editEvent(eventNode, obj1, obj2){
 	$('#submit-changes').click(function(){
 		let calId = '';
 
-		delete calData[obj1][obj2][eventNode];
 		if(obj1 == 'months'){
 			calId = $('#' + eventNode).parent().parent().attr("id") + '-' + createId($('#edit-event').val() + $('#edit-time-start').val() + $('#edit-time-end').val());
 		}
@@ -113,9 +113,14 @@ function editEvent(eventNode, obj1, obj2){
 		let calDesc = $('#edit-desc').val();
 
 		if(calId in calData[obj1][obj2]){
-			alert('Event with same title, start & end date already exists for this date.');
+			$('#error-tag').html('Event with same title, start & end date already exists.');
+			$('#error-tag').addClass('alert alert-danger');
 			return;
 		}
+
+		$('#edit-modal').modal('hide');
+
+		delete calData[obj1][obj2][eventNode];
 		
 		calData[obj1][obj2][calId] = {
 			'title': calTitle,
@@ -140,19 +145,20 @@ function editEvent(eventNode, obj1, obj2){
 }
 
 function verify(eventNode, obj1, obj2){
-	$('#event-div').append(verifyModal);	
+	console.log($('#' + eventNode).parent());
+	if(eventNode[0] === '_'){
+		$('#event-div').append(verifyModal);
 
-	$('#delete-event').click(function(){
-		if(eventNode.childNodes[1].className == 'close'){
-			delete calData[obj1][obj2][eventNode.childNodes[5].id];
-			eventNode.remove();
-		}
-		else{ 
+		$('#delete-event').click(function(){
 			delete calData[obj1][obj2][eventNode];
 			$('#' + eventNode).parent().remove();
-		}
-	});
-
+		});
+	}	
+	else{
+		delete calData[obj1][obj2][eventNode];
+		$('#' + eventNode).parent().remove();
+	}	
+	
 	$('#verify-modal').on('hidden.bs.modal', function () {
 		$('#verify-modal').remove();
 	});
@@ -503,18 +509,16 @@ $(document).ready(function() {
    	//edit and x event functions
 
    	$('#event-div').on('click','.close',function(){
-   		let delNode = this.parentNode;
+   		let delNode = this.parentNode.childNodes[5].id;
 		verify(delNode, 'events', 'eventList');
 	});
 
    	$('#rink-cal').on('click','.close',function(){	
-   		let calDelNode = this.parentNode;
-		delete calData.months[createId(monthHeader)][calDelNode.childNodes[5].id];
-		calDelNode.remove();
+   		let calDelNode = this.parentNode.childNodes[5].id;
+		verify(calDelNode, 'months', createId(monthHeader));
 	});
 
-
-   	$('#event-div').on('click','.ed',function(){
+	$('#event-div').on('click','.ed',function(){
    		let quickEditNode = this.parentNode.childNodes[5].id;
 		editEvent(quickEditNode, 'events', 'eventList');
    	});
@@ -540,7 +544,6 @@ $(document).ready(function() {
       			'Content-Type': 'application/json'
       		},
     	success: function(){
-        	// alert("Saved! It worked.");
         	$('#event-div').append(successModal());
         	$('#success-modal').modal('show');
         	$('#success-modal').on('hidden.bs.modal', function () {

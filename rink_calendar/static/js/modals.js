@@ -107,7 +107,8 @@ function editModal(edTitle, edDesc, edColor, modTitle, btnText){
 			        	</form>\
 					</div>\
 					<div class="modal-footer">\
-						<button type="button" id="submit-changes" class="btn btn-primary" data-dismiss="modal">' + btnText + '</button>\
+						<div id="error-tag"></div>\
+						<button type="button" id="submit-changes" class="btn btn-primary">' + btnText + '</button>\
 					</div>\
 				</div>\
 			</div>\
@@ -131,6 +132,22 @@ function successModal(){
 
 	return successStr;
 }
+
+// function errorModal(){
+// 	let errorStr =
+// 		'<div class="modal fade" id="error-modal">\
+// 			  	<div class="modal-dialog" role="document">\
+// 			    	<div class="modal-content">\
+// 			      		<div class="modal-body">\
+// 			       			 <h6 class="text-center">Event with same title, start & end time already exists.</h6>\
+// 			       			 <div class="text-center"><i class="fa fa-check-square" aria-hidden="true"></i></div>\
+// 			      		</div>\
+// 			    	</div>\
+// 			  	</div>\
+// 		</div>';
+
+// 	return errorStr;	
+// }
 
 
 
