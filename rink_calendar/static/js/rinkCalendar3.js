@@ -96,7 +96,7 @@ function editEvent(eventNode, obj1, obj2){
 		$('#edit-main-color').css('background', calColorPick);
 		$("#edit-modal").focus(); //for enter key trigger
 	});
-
+	console.log(eventNode);
 	$('#submit-changes').click(function(){
 		let calId = '';
 
@@ -112,7 +112,7 @@ function editEvent(eventNode, obj1, obj2){
 		let calEnd = $('#edit-time-end').val();
 		let calDesc = $('#edit-desc').val();
 
-		if(calId in calData[obj1][obj2]){
+		if(calId in calData[obj1][obj2] && calId !== eventNode){
 			$('#error-tag').html('Event with same title, start & end date already exists.');
 			$('#error-tag').addClass('alert alert-danger');
 			return;
@@ -192,11 +192,11 @@ function createEventDisplay(title, timeStart, timeEnd){
     let startMinutes = timeStart.split(':')[1];
     let endHour = timeEnd.split(':')[0];
     let endMinutes = timeEnd.split(':')[1];
-    let displayTitle = title.substring(0,10);
+    let displayTitle = title.substring(0,12);
     let startDisplay = '';
     let endDisplay = '';
     
-    if(title.length > 10){
+    if(title.length > 12){
         displayTitle += '...'
     } 
     

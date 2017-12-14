@@ -22,14 +22,14 @@ function eventModal(evTitle, evStart, evEnd, evDesc){
 			          <span aria-hidden="true">&times;</span>\
 			        </button>\
 			      </div>\
-			      <div class="modal-body">' +
-			        'Event: ' + evTitle + '<br>' +
-			        'Time: ' + evStart + ' to ' + evEnd + '<br>' +
-			        'Description: ' + evDesc + '<br>' +
+			      <div id="event-desc" class="modal-body text-center">' +
+			        '<div><b><span class="event-mod-headers">Event:</span></b><br>' + evTitle + '</div><br>' +
+			        '<div><b><span class="event-mod-headers">Time:</span></b><br>' + evStart + '-' + evEnd + '</div><br>' +
+			        '<div><b><span class="event-mod-headers">Description:</span></b><br>' + evDesc + '</div>' +
 			      '</div>\
 			      <div class="modal-footer">\
-			      	<button type="button" id="verify-btn" class="btn btn-danger" data-toggle="modal" data-target="#verify-modal" data-dismiss="modal">Delete Event</button>\
-			        <button id="edit-event" type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit-modal" data-dismiss="modal">EDIT</button>\
+			      	<button type="button" id="verify-btn" class="btn btn-danger" data-toggle="modal" data-target="#verify-modal" data-dismiss="modal"><i class="fa fa-trash" aria-hidden="true"></i></button>\
+			        <button id="edit-event" type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit-modal" data-dismiss="modal"><i class="fa fa-pencil" aria-hidden="true"></i></button>\
 			      </div>\
 			    </div>\
 			  </div>\
@@ -124,7 +124,7 @@ function successModal(){
 			    	<div class="modal-content">\
 			      		<div class="modal-body">\
 			       			 <h6 class="text-center">Changes Saved!</h6>\
-			       			 <div class="text-center"><i class="fa fa-check-square" aria-hidden="true"></i></div>\
+			       			 <div class="text-center"><i class="fa fa-check-circle" aria-hidden="true"></i></div>\
 			      		</div>\
 			    	</div>\
 			  	</div>\
@@ -132,22 +132,3 @@ function successModal(){
 
 	return successStr;
 }
-
-// function errorModal(){
-// 	let errorStr =
-// 		'<div class="modal fade" id="error-modal">\
-// 			  	<div class="modal-dialog" role="document">\
-// 			    	<div class="modal-content">\
-// 			      		<div class="modal-body">\
-// 			       			 <h6 class="text-center">Event with same title, start & end time already exists.</h6>\
-// 			       			 <div class="text-center"><i class="fa fa-check-square" aria-hidden="true"></i></div>\
-// 			      		</div>\
-// 			    	</div>\
-// 			  	</div>\
-// 		</div>';
-
-// 	return errorStr;	
-// }
-
-
-

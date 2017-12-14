@@ -1,6 +1,7 @@
 /** {
 	border: 1px solid red;	
 }*/
+
 table {
 	margin-left: auto;
 	margin-right: auto;
@@ -48,8 +49,9 @@ th {
 .cell-shell {
 	height: 150px;
 	width: 150px;
-	border: solid .5px #e2e0e0;
+	border: solid 4px white;
 	vertical-align: top;
+	background: rgba(73,155,234,.15);
 }
 
 .cell-data {
@@ -70,10 +72,10 @@ th {
 
 #event-div {
 	margin: 0px 0px 0px 20px;
-	border: 1px solid #e0e0e0;
-	border-radius:4px;/*
-	background: #e0e0e0;*/
-	width: 152px;
+	border: solid 4px #f2efef;
+	/*border-radius:4px;*/
+	background: #f9f9f9;
+	width: 158px;
 	height: 800px;
 	float:right;
 }
@@ -183,11 +185,15 @@ th {
 	-webkit-box-shadow: none;
 }
 
-.fa-check-square {
-	color: green;
+.fa-check-circle {
+	color: #6ddb46;
 	font-size: 70px;
 }
 
 #success-modal .modal-dialog {
 	width: 350px;
+}
+
+#event-desc {
+	white-space: pre-wrap;
 }
