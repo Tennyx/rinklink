@@ -24,13 +24,9 @@ table {
 }
 
 #events-wrapper {
-	margin-top: 90px;
+	margin-top: 50px;
 	width:150px;
 	float:right;
-}
-
-#events-header {
-
 }
 
 .date-num {
@@ -168,9 +164,14 @@ th {
 
 .btn-add {
 	color: rgba(73,155,234,1);
-	background: white;	
-	margin-bottom: 2px;
+	background: rgba(0,0,0,0);	
+	margin-bottom: -10px;
 	float: left;
+	padding-left: 0;
+}
+
+#events-header {
+	/*background: red;*/
 }
 
 .btn-cycle:hover, .btn-add:hover {
@@ -196,4 +197,9 @@ th {
 
 #event-desc {
 	white-space: pre-wrap;
+}
+
+#btn-save {
+	width:158px;
+	margin:0px;
 }

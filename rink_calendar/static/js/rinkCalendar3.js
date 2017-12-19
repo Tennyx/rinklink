@@ -12,9 +12,11 @@ let calData = {
 let toggleSort = false;
 let calUser = window.location.search.substring(1).substring(2);
 
+
+
 //keyboard functions
 
-let enterFunction = function(){
+let enterFunction = function(event){
 	if (event.keyCode == 13 && document.activeElement.tagName !== 'TEXTAREA') {
 		$('#submit-changes').click();
 	}
@@ -163,12 +165,6 @@ function verify(eventNode, obj1, obj2){
 		$('#verify-modal').remove();
 	});
 }
-
-//load from DB
-
-$.getJSON( "/rink-calendar/api/?q=" + calUser, function( data ) {
-	calData = data.user_data		
-});	
 
 //creates HTML IDs, filters anything not alphanumeric
 
@@ -327,8 +323,9 @@ function drop(ev, el) {
 //creates calendar
 
 function createCal(date){
-	let monthStart = moment(date).startOf('month').weekday();
-	let monthDays = moment(date).daysInMonth();
+	let convertDate = [date.substr(date.length-4) + '-' + date.substr(0,3), 'YYYY-MMM']; //necessary for safari, ff
+	let monthStart = moment(convertDate[0], convertDate[1]).startOf('month').weekday();
+	let monthDays = moment(convertDate[0], convertDate[1]).daysInMonth();
 	let monthWeeks = Math.floor((monthDays + monthStart) / 7);
 	let firstWeekCounter = monthStart;
 	let calendar = [];
@@ -398,17 +395,18 @@ function createCal(date){
 	}
 }
 
+
 //after document loads
 
 $(document).ready(function() {
 
-	//fill out event list in proper order
+	//load from DB
 
-	$('#event-div').append(calData.eventOrder);
-
-	//create calendar
-
-	createCal();
+	$.getJSON( "/rink-calendar/api/?q=" + calUser, function( data ) {
+		calData = data.user_data;	
+		createCal(monthHeader);
+		$('#event-div').append(calData.eventOrder);
+	});
 
 	//sort events in event list
 
@@ -434,7 +432,7 @@ $(document).ready(function() {
    		monthVar += 1;	
    		monthHeader = moment().startOf('month').add(monthVar, "month").format("MMMM YYYY");
 		createCal(monthHeader);
-   	});
+	});
 
    	$('#current-month').click(function(){
    		monthVar = 0;	
@@ -532,8 +530,7 @@ $(document).ready(function() {
 
    	$('#btn-save').click(function(){
    		calData.eventOrder = $('#event-div').html();
-
-   		event.preventDefault();
+   		
 		$.ajax({
     		type : "POST",
     		url : "/rink-calendar/api/",

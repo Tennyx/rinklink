@@ -98,7 +98,7 @@ function editModal(edTitle, edDesc, edColor, modTitle, btnText){
 											    <button type="button" class="btn btn-secondary" style="background:#e2db09"></button>\
 											    <button type="button" class="btn btn-secondary" style="background:#35d130"></button>\
 											    <button type="button" class="btn btn-secondary" style="background:#3c7de5"></button>\
-											    <button type="button" class="btn btn-secondary" style="background:#9737ba"></button>\
+											    <button type="button" class="btn btn-secondary btn-color" style="background:#9737ba"></button>\
 										  </div>\
 										</div>\
 									</div>\
