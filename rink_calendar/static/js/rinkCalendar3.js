@@ -95,6 +95,7 @@ function editEvent(eventNode, obj1, obj2){
 
 	$('.dropdown-menu button').click(function(){
 		let calColorPick = $(this).css("background-color");
+		
 		$('#edit-main-color').css('background', calColorPick);
 		$("#edit-modal").focus(); //for enter key trigger
 	});

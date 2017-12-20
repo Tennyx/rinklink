@@ -1,16 +1,16 @@
 /** {
 	border: 1px solid red;	
-}*/
-
+}
+*/
 table {
-	margin-left: auto;
-	margin-right: auto;
+	/*margin-left: auto;*/
+	/*margin-right: auto;*/
 }
 
 #cal-top {
 	font-family: 'Russo One', sans-serif;
 	color: rgba(73,155,234,1);
-	margin-left: auto;
+	/*margin-left: auto;*/
 	margin-right: auto;
 	margin-bottom:10px;
 	max-width: 1050px;
@@ -24,9 +24,9 @@ table {
 }
 
 #events-wrapper {
-	margin-top: 50px;
+	margin-top: 75.5px;
+	margin-left: auto;
 	width:150px;
-	float:right;
 }
 
 .date-num {
@@ -67,13 +67,11 @@ th {
 }
 
 #event-div {
-	margin: 0px 0px 0px 20px;
-	border: solid 4px #f2efef;
+	border: solid 2px rgba(73,155,234,.25);
 	/*border-radius:4px;*/
-	background: #f9f9f9;
-	width: 158px;
+	background: rgba(73,155,234,.15);
+	width: 154.5px;
 	height: 800px;
-	float:right;
 }
 
 .form-price {
@@ -85,9 +83,8 @@ th {
 	border: none;
 	outline: none;
 	float:right;
-	margin-right: 4px;
 	padding: 0px 5px 0px 5px;
-	border-radius: 4px
+	border-radius: 4px;
 }
 
 #toggle-sort:hover {
@@ -166,12 +163,15 @@ th {
 	color: rgba(73,155,234,1);
 	background: rgba(0,0,0,0);	
 	margin-bottom: -10px;
-	float: left;
-	padding-left: 0;
+}
+
+#add-new {
+	margin-bottom:10px;
+	margin-left: -5px;
 }
 
 #events-header {
-	/*background: red;*/
+	margin-left: 10px;
 }
 
 .btn-cycle:hover, .btn-add:hover {

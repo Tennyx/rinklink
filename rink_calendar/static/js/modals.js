@@ -2,7 +2,7 @@ const verifyModal =
 		'<div class="modal fade" id="verify-modal">\
 			  	<div class="modal-dialog" role="document">\
 			    	<div class="modal-content">\
-			      		<div class="modal-body">\
+			      		<div class="modal-body text-center">\
 			       			 <h6 class="text-center">Are you sure you want to delete this event?</h6>\
 			      			<button type="button" id="delete-event" class="btn btn-danger" data-dismiss="modal">Yes</button>\
 			        		<button type="button" class="btn btn-primary" data-dismiss="modal">No</button>\
@@ -98,7 +98,7 @@ function editModal(edTitle, edDesc, edColor, modTitle, btnText){
 											    <button type="button" class="btn btn-secondary" style="background:#e2db09"></button>\
 											    <button type="button" class="btn btn-secondary" style="background:#35d130"></button>\
 											    <button type="button" class="btn btn-secondary" style="background:#3c7de5"></button>\
-											    <button type="button" class="btn btn-secondary btn-color" style="background:#9737ba"></button>\
+											    <button type="button" class="btn btn-secondary" style="background:#9737ba"></button>\
 										  </div>\
 										</div>\
 									</div>\
